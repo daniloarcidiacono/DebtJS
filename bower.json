@@ -1,0 +1,23 @@
+{
+  "name": "debtjs",
+  "authors": [
+    "Danilo Arcidiacono <danilo.arcidiacono@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.7",
+    "lumx": "^1.0.6",
+    "mousetrap": "^1.6.0"
+  }
+}
