@@ -15,13 +15,37 @@
 			<lx-button lx-type="fab" ng-disabled="mainCtrl.getSelectedItemsCount() === 0" ng-click="mainCtrl.confirmRemoval()" lx-tooltip="Remove selected" lx-tooltip-position="bottom">
 				<i class="mdi mdi-delete"></i>
 			</lx-button>
-			<lx-button lx-type="fab" ng-click="mainCtrl.exportJson()" lx-tooltip="Export JSON" lx-tooltip-position="bottom" >
-				<i class="mdi mdi-download"></i>
-			</lx-button>
-			
-			<lx-button lx-type="fab" ng-click="mainCtrl.importJson()" lx-tooltip="Import JSON" lx-tooltip-position="bottom" >
-				<i class="mdi mdi-upload"></i>							
-			</lx-button>						
+
+            <!-- Exporting -->
+            <lx-dropdown lx-position="left">
+                <lx-dropdown-toggle>
+                    <lx-button lx-type="fab" lx-tooltip="Export" lx-tooltip-position="bottom">
+                        <i class="mdi mdi-download"></i>
+                    </lx-button>
+                </lx-dropdown-toggle>
+     
+                <lx-dropdown-menu>
+                    <ul>
+                        <li><a class="dropdown-link" ng-click="mainCtrl.exportJson()">JSON</a></li>
+                        <li><a class="dropdown-link" ng-click="mainCtrl.exportPasteBin()">Pastebin</a></li>
+                    </ul>
+                </lx-dropdown-menu>
+            </lx-dropdown>
+
+            <!-- Importing -->			
+            <lx-dropdown lx-position="right">
+                <lx-dropdown-toggle>
+        			<lx-button lx-type="fab" lx-tooltip="Import" lx-tooltip-position="bottom" >
+        				<i class="mdi mdi-upload"></i>							
+        			</lx-button>	
+                </lx-dropdown-toggle>
+                <lx-dropdown-menu>
+                    <ul>
+                        <li><a class="dropdown-link" ng-click="mainCtrl.importJson()">JSON</a></li>
+                        <li><a class="dropdown-link" ng-click="mainCtrl.importPasteBin()">Pastebin</a></li>
+                    </ul>
+                </lx-dropdown-menu>
+            </lx-dropdown>
         </div>	 
     </header>
  
@@ -90,7 +114,7 @@
     </table>
 </div>
 
-<!-- Import dialog -->
+<!-- Import json dialog -->
 <lx-dialog id="importDialog">
     <lx-dialog-header>
         <div class="toolbar bgc-primary pl++">
@@ -109,6 +133,82 @@
     </lx-dialog-content>
  
     <lx-dialog-footer>
+        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cancel</lx-button>
+    </lx-dialog-footer>
+</lx-dialog>
+
+<!-- Export pastebin dialog -->
+<lx-dialog id="exportPasteBinDialog">
+    <lx-dialog-header>
+        <div class="toolbar bgc-primary pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Choose a name
+            </span>
+        </div>
+        <lx-progress lx-type="linear" lx-color="teal" ng-if="mainCtrl.showDeterminateLinearProgress" lx-value="{{ mainCtrl.determinateLinearProgressValue }}"></lx-progress>
+        <lx-progress lx-type="linear" lx-color="teal" ng-if="mainCtrl.showIndeterminateLinearProgress"></lx-progress>
+    </lx-dialog-header>
+ 
+    <lx-dialog-content>
+        <div class="p+ pt0">
+            <lx-text-field lx-allow-clear="true" lx-label="Name">
+                <input type="text" ng-model="mainCtrl.exportDialog.name">
+            </lx-text-field>
+        </div>
+    </lx-dialog-content>
+ 
+    <lx-dialog-footer>
+        <lx-button lx-type="flat" ng-click="mainCtrl.exportPasteBin(mainCtrl.exportDialog.name)">Export</lx-button>
+        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cancel</lx-button>
+    </lx-dialog-footer>
+</lx-dialog>
+
+<!-- Import pastebin dialog -->
+<lx-dialog id="importPasteBinDialog">
+    <lx-dialog-header>
+        <div class="toolbar bgc-primary pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Pick a paste
+            </span>
+        </div>
+        <lx-progress lx-type="linear" lx-color="teal" ng-if="mainCtrl.showDeterminateLinearProgress" lx-value="{{ mainCtrl.determinateLinearProgressValue }}"></lx-progress>
+        <lx-progress lx-type="linear" lx-color="teal" ng-if="mainCtrl.showIndeterminateLinearProgress"></lx-progress>
+    </lx-dialog-header>
+ 
+    <lx-dialog-content>
+        <div class="p+ pt0">
+            <!-- 
+            <ul class="list mt++">
+                <li class="list-row" ng-repeat="paste in mainCtrl.importDialog.pasteKeys">
+                    <div class="list-row__content">
+                        <span class="display-block">{{ paste.name }}</span>
+                        <span class="display-block fs-body-1 tc-black-2">http://pastebin.com/{{ paste.key }}</span>
+                    </div>
+                </li>
+            </ul> -->       
+
+            <lx-radio-group ng-if="mainCtrl.importDialog.pasteKeys !== null && mainCtrl.importDialog.pasteKeys.length > 0">
+                <lx-radio-button ng-repeat="paste in mainCtrl.importDialog.pasteKeys" name="pasteKeys" value="{{ paste.key }}" ng-model="mainCtrl.importDialog.pasteSelected">
+                    <lx-radio-button-label>
+                        {{ paste.name }}
+
+                        <lx-button lx-type="icon" ng-click="mainCtrl.deletePasteBin($index)" lx-tooltip="Delete" lx-tooltip-position="right">
+                            <i class="mdi mdi-delete"></i>
+                        </lx-button>
+                    </lx-radio-button-label>
+                    <lx-radio-button-help>http://pastebin.com/{{ paste.key }}</lx-radio-button-help>
+                    
+                </lx-radio-button>
+            </lx-radio-group>
+
+            <div ng-if="mainCtrl.importDialog.pasteKeys !== null && mainCtrl.importDialog.pasteKeys.length === 0">
+                No pastes available.
+            </div>
+        </div>
+    </lx-dialog-content>
+ 
+    <lx-dialog-footer>
+        <lx-button lx-type="flat" ng-disabled="mainCtrl.importDialog.pasteSelected === null" ng-click="mainCtrl.importPasteBin(mainCtrl.importDialog.pasteSelected)">Import</lx-button>
         <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cancel</lx-button>
     </lx-dialog-footer>
 </lx-dialog>

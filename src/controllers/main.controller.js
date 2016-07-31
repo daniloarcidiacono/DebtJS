@@ -1,5 +1,6 @@
-function MainController($scope, $window, LxNotificationService, LxDialogService) {
+function MainController($scope, $window, PasteBinService, LxNotificationService, LxDialogService) {
 	this.$scope = $scope;
+	this.PasteBinService = PasteBinService;
 	this.LxNotificationService = LxNotificationService;
 	this.LxDialogService = LxDialogService;
 	this.showDeterminateLinearProgress = false;
@@ -8,6 +9,8 @@ function MainController($scope, $window, LxNotificationService, LxDialogService)
 	this.newDocument(false);
 	this.author = "Danilo Arcidiacono";
 	this.appLoaded = false;
+	this.exportDialog = { name: "" };
+	this.importDialog = { pasteKeys: null, pasteSelected: null };
 
 	var localStorageValue = localStorage.getItem('useLocalStorage');
 	if (localStorageValue === null) {
@@ -92,9 +95,12 @@ MainController.prototype.newDocument = function(askFirst) {
 MainController.prototype.loadDocumentFromLocalStorage = function() {
 	var stored = localStorage.getItem('doc');
 	if (stored !== null) {
-		this.doc = JSON.parse(stored);
-		this.$scope.$evalAsync();
-		this.LxNotificationService.info('Document loaded.');
+		try {
+			this.importText(stored);
+			this.LxNotificationService.info('Document loaded.');
+		} catch (e) {
+			this.LxNotificationService.warning(e);
+		}
 	}
 
 	/*
@@ -121,11 +127,11 @@ MainController.prototype.saveDocumentOnLocalStorage = function(notify) {
 
 // http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
 MainController.prototype.saveFile = function(filename, data) {
-    var blob = new Blob([data], {type: 'text/json'});
-    if(window.navigator.msSaveOrOpenBlob) {
+    var blob = new Blob([data], { type: 'text/json' });
+
+    if (window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveBlob(blob, filename);
-    }
-    else{
+    } else {
         var elem = window.document.createElement('a');
         elem.href = window.URL.createObjectURL(blob);
         elem.download = filename;        
@@ -135,9 +141,122 @@ MainController.prototype.saveFile = function(filename, data) {
     }
 }
 
+MainController.prototype.formatDate = function(date) {
+  var mm = date.getMonth() + 1; // getMonth() is zero-based
+  var dd = date.getDate();
+  if (dd < 10) { dd = "0" + dd; }
+  if (mm < 10) { mm = "0" + mm; }
+
+  return dd + "_" + mm + "_" + date.getFullYear();
+};
+
+MainController.prototype.pickExportTitle = function() {
+	return this.doc.title.toLowerCase().replace(' ', '') + "_" + this.formatDate(this.doc.date);
+}
+
+MainController.prototype.resetProgressBar = function() {
+	this.showDeterminateLinearProgress = false;
+	this.showIndeterminateLinearProgress = false;
+	this.determinateLinearProgressValue = 0;
+}
+
+MainController.prototype.exportPasteBin = function(pasteName) {
+	if (pasteName === undefined) {
+		this.exportDialog.name = this.pickExportTitle();
+		this.LxDialogService.open("exportPasteBinDialog");
+		return;
+	}
+
+	this.showDeterminateLinearProgress = false;
+	this.showIndeterminateLinearProgress = !this.showDeterminateLinearProgress;
+
+	var self = this;
+	this.PasteBinService.createPastebin(this.exportDialog.name, this.doc).then(function (result) {
+		// Close the dialog when the upload completes
+		self.resetProgressBar();
+		self.LxDialogService.close("exportPasteBinDialog");
+		self.LxNotificationService.success('Paste saved to http://pastebin.com/' + result.data);		
+	}).catch(function(error) {
+		self.resetProgressBar();
+		self.LxNotificationService.alert(error.statusText, error.data, 'Ok', function(answer) { });
+	});
+}
+
+MainController.prototype.deletePasteBin = function(pasteIndex) {
+	var self = this;
+	var paste = this.importDialog.pasteKeys[pasteIndex];
+
+	this.LxNotificationService.confirm('Remove paste ' + paste.name + '?', 'This operation cannot be undone.',
+    {
+    	// Swap them for having the red color on removal
+        ok: 'Keep them',
+        cancel: 'Remove'
+    }, 
+    function(answer) {
+    	// Swap them for having the red color on removal
+        if (answer === false) {
+			self.showDeterminateLinearProgress = false;
+			self.showIndeterminateLinearProgress = !self.showDeterminateLinearProgress;
+			
+			self.PasteBinService.deletePaste(paste.key).then(function (result) {
+				self.resetProgressBar();		
+				self.importDialog.pasteSelected = null;
+				self.importDialog.pasteKeys.splice(pasteIndex, 1);				
+				self.LxNotificationService.success('Paste removed');
+			}).catch(function(error) {
+				self.resetProgressBar();
+				self.LxNotificationService.alert(error.statusText, error.data, 'Ok', function(answer) { });
+			});        	
+        }
+    });
+}
+
 MainController.prototype.exportJson = function() {
 	var dataStr = JSON.stringify(this.doc);
-	this.saveFile('dump.json', dataStr);
+	this.saveFile(this.pickExportTitle() + ".json", dataStr);
+}
+
+MainController.prototype.importPasteBin = function(pasteKey) {
+	var self = this;
+
+	if (pasteKey === undefined) {
+		this.showDeterminateLinearProgress = false;
+		this.showIndeterminateLinearProgress = !this.showDeterminateLinearProgress;
+		this.importDialog.pasteKeys = null;
+		this.importDialog.pasteSelected = null;
+		this.LxDialogService.open("importPasteBinDialog");
+		this.$scope.$evalAsync();
+
+		this.PasteBinService.listPastebins().then(function (result) {
+			self.importDialog.pasteKeys = result.data;		
+			self.resetProgressBar();			
+		}).catch(function(error) {
+			self.resetProgressBar();
+			self.LxDialogService.close("importPasteBinDialog");
+			self.LxNotificationService.alert(error.statusText, error.data, 'Ok', function(answer) { });			
+		});
+
+		return;
+	}
+
+	this.showDeterminateLinearProgress = false;
+	this.showIndeterminateLinearProgress = !this.showDeterminateLinearProgress;
+	this.PasteBinService.getPaste(pasteKey).then(function (result) {
+		// Close the dialog when the upload completes
+		self.LxDialogService.close("importPasteBinDialog");
+		self.resetProgressBar();
+		self.$scope.$evalAsync();
+		
+		try {
+			self.importText(JSON.stringify(result.data));
+		} catch (e) {
+			self.resetProgressBar();
+			self.LxNotificationService.alert('Error', e, 'Ok', function(answer) { });
+		}
+	}).catch(function(error) {
+		self.resetProgressBar();
+		self.LxNotificationService.alert(error.statusText, error.data, 'Ok', function(answer) { });			
+	});
 }
 
 MainController.prototype.importJson = function(fileName) {
@@ -164,29 +283,32 @@ MainController.prototype.importJson = function(fileName) {
 	reader.onload = function(progressEvent) {
 		// Close the dialog when the upload completes
 		self.LxDialogService.close("importDialog");
-		self.showDeterminateLinearProgress = false;
-		self.showIndeterminateLinearProgress = false;
-		self.determinateLinearProgressValue = 0;
+		self.resetProgressBar();
 		self.$scope.$evalAsync();
-
-		var newDoc = null;
+		
 		try {
-			newDoc = JSON.parse(this.result);
-			
-			// Check the version
-			if (newDoc.version !== self.doc.version) {
-				throw "Invalid version (expected " + self.doc.version + ", got " + newDoc.version + ")";
-			}
-
-			self.doc = newDoc;
-			self.$scope.$evalAsync();
+			self.importText(this.result);
 		} catch (e) {
-			self.LxNotificationService.alert('Error', e, 'Ok', function(answer) {
-            });
+			self.resetProgressBar();
+			self.LxNotificationService.alert('Error', e, 'Ok', function(answer) { });
 		}
-
 	};
+
   	reader.readAsText(fileName);		
+}
+
+MainController.prototype.importText = function(text) {
+	var newDoc = JSON.parse(text);
+		
+	// Check the version
+	if (newDoc.version !== this.doc.version) {
+		throw "Invalid version (expected " + this.doc.version + ", got " + newDoc.version + ")";
+	}
+
+	// Convert back the date object
+	newDoc.date = new Date(newDoc.date);
+	this.doc = newDoc;
+	this.$scope.$evalAsync();
 }
 
 MainController.prototype.confirmRemoval = function() {
@@ -380,4 +502,4 @@ MainController.prototype.getAuthor = function() {
 	return this.author;
 }
 
-app.controller('mainController', MainController, ['$scope', '$window', 'LxNotificationService', 'LxDialogService']);
+app.controller('mainController', MainController, ['$scope', '$window', 'PasteBinService', 'LxNotificationService', 'LxDialogService']);
