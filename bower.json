@@ -17,8 +17,7 @@
   ],
   "dependencies": {
     "angular": "^1.5.7",
-    "lumx": "^1.0.6",
-    "mousetrap": "^1.6.0"
+    "angular-material": "^1.1.1"
   },
   "version": "1.2.0"
 }

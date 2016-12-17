@@ -5,7 +5,6 @@ function PasteBinService($http, $q) {
 
 // Creates a new paste (pasteJsonContent must be an object, not a string)
 PasteBinService.prototype.createPastebin = function(pasteTitle, pasteJsonContent) {
-
 	var req = {
 		method: 'POST',
 		url: 'http://192.168.56.1:888/DebtJS/create.php',
@@ -28,11 +27,10 @@ PasteBinService.prototype.createPastebin = function(pasteTitle, pasteJsonContent
 	});
 
 	return deferred.promise;
-}
+};
 
 // Listes the available paste bins
 PasteBinService.prototype.listPastebins = function() {
-
 	var req = {
 		method: 'GET',
 		url: 'http://192.168.56.1:888/DebtJS/list.php',
@@ -51,11 +49,10 @@ PasteBinService.prototype.listPastebins = function() {
 	});
 
 	return deferred.promise;
-}
+};
 
 // Listes the available paste bins
 PasteBinService.prototype.getPaste = function(pasteKey) {
-
 	var req = {
 		method: 'GET',
 		url: 'http://192.168.56.1:888/DebtJS/read.php?id=' + pasteKey,
@@ -74,11 +71,10 @@ PasteBinService.prototype.getPaste = function(pasteKey) {
 	});
 
 	return deferred.promise;
-}
+};
 
 // Listes the available paste bins
 PasteBinService.prototype.deletePaste = function(pasteKey) {
-
 	var req = {
 		method: 'DELETE',
 		url: 'http://192.168.56.1:888/DebtJS/delete.php?id=' + pasteKey,
@@ -97,6 +93,6 @@ PasteBinService.prototype.deletePaste = function(pasteKey) {
 	});
 
 	return deferred.promise;
-}
+};
 
 app.service('PasteBinService', PasteBinService, ['$http', '$q']);

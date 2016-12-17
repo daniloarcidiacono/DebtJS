@@ -1,56 +1,218 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>DebtJS</title>
 
 		<!-- Encoding -->
 		<meta charset="UTF-8">
 
+		<!-- Viewport settings -->
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
 		<!-- CSS -->
-		<link rel="stylesheet" href="bower_components/lumx/dist/lumx.css">
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-		<link rel="stylesheet" href="css/spinner.css">
-		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+		<style>
+			md-nav-bar .md-nav-bar {
+				background: #283593;
+			}
+		</style>
 	</head>
-	<body ng-app="myModule" ng-controller="mainController as mainCtrl">
-		<div class="spinner" ng-hide="mainCtrl.appLoaded">
-  			<div class="bounce1"></div>
-	  		<div class="bounce2"></div>
-		  	<div class="bounce3"></div>
-		</div>
+	<body ng-app="DebtJSApp" ng-controller="mainController as mainCtrl" ng-cloak>
+		<!-- Sidenav -->
+		<md-sidenav class="md-sidenav-left"
+					md-component-id="left"
+					md-whiteframe="4">
+			<md-toolbar class="md-theme-light">
+				<h1 class="md-toolbar-tools">Menu</h1>
+			</md-toolbar>
+			<md-content layout-padding>
+				<form layout="column">
 
-		<div class="p+ pt0" ng-cloak style="width: 100%; height: 100%; display: flex; flex-flow: column nowrap; justify-content: flex-start;">
-			DebtJS v{{ mainCtrl.getVersion() }} by {{ mainCtrl.getAuthor() }}
-	
-			<debtjs-main-header style="flex-grow: 0; flex-shrink: 0"></debtjs-main-header>
+					<div layout="row">
+						<md-input-container class="md-block" flex>
+							<label for="txtDescription">Description</label>
+							<input type="text" id="txtDescription" ng-model="data">
+						</md-input-container>
 
-			<lx-tabs lx-color="green" lx-layout="full" style="flex-grow: 1; flex-shrink: 1;">
-			    <lx-tab lx-label="Movements">
-			    	<debtjs-movements-tab></debtjs-movements-tab>
-			    </lx-tab>
-			 
-			    <lx-tab lx-label="Buyers">
-			    	<debtjs-buyers-tab></debtjs-buyers-tab>
-			    </lx-tab>
-			 
-			    <lx-tab lx-label="Settings">
-			    	<debtjs-settings-tab></debtjs-settings-tab>
-			    </lx-tab>
-			</lx-tabs>
-		</div>
+						<md-input-container>
+							<label>Enter date</label>
+							<md-datepicker ng-model="myDate"></md-datepicker>
+						</md-input-container>
+					</div>
+
+					<md-input-container>
+						<label>Buyer</label>
+						<md-select ng-model="ctrl.userState">
+							<md-option>
+								Danilo
+							</md-option>
+							<md-option>
+								Stefano
+							</md-option>
+							<md-option>
+								Rosario
+							</md-option>
+						</md-select>
+					</md-input-container>
+
+
+					<md-list>
+						<md-list-item class="md-2-line">
+							<div class="md-list-item-text">
+								<h3>Local storage</h3>
+								<p>Use local storage to save the current data</p>
+							</div>
+							<md-switch class="md-primary" ng-model="setting.enabled"></md-switch>
+						</md-list-item>
+
+						<md-divider ></md-divider>
+
+						<md-list-item class="md-3-line">
+							<img ng-src="static/icons/github_logo.svg" class="md-avatar" alt="Github" />
+							<div class="md-list-item-text" layout="column">
+								<h3>DebtJS Version 1.0.0</h3>
+								<h4>By Danilo Arcidiacono</h4>
+								<p>https://github.com/daniloarcidiacono/DebtJS</p>
+							</div>
+						</md-list-item>
+					</md-list>
+
+
+					<!--
+					<md-input-container class="md-3-line">
+						<md-switch class="md-primary md-3-line" md-no-ink ng-model="message.selected">
+							<h3>Local storage</h3>
+							<h4>Local storage</h4>
+							<p>Local storage</p>
+
+						</md-switch>
+					</md-input-container>-->
+				</form>
+				<!--
+				<md-button ng-click="close()" class="md-primary">
+					Close Sidenav Right
+				</md-button>
+				-->
+			</md-content>
+		</md-sidenav>
+
+		<section layout="column" layout-fill>
+			<!-- Toolbar -->
+			<md-toolbar class="md-hue-2" flex-none>
+				<div class="md-toolbar-tools">
+					<md-button class="md-icon-button" aria-label="Settings" data-ng-click="mainCtrl.toggleSidenav()">
+						<md-icon md-svg-icon="static/icons/menu.svg"></md-icon>
+					</md-button>
+					<h3>
+						<span>DebtJS</span>
+					</h3>
+					<span flex></span>
+					<!--
+					<md-button class="md-icon-button" aria-label="Favorite">
+						<md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+					</md-button> -->
+					<md-button class="md-icon-button" aria-label="New">
+						<md-icon md-svg-icon="static/icons/insert_drive_file.svg"></md-icon>
+						<md-tooltip md-direction="bottom">
+							New
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" aria-label="Add">
+						<md-icon md-svg-icon="static/icons/add_circle_outline.svg"></md-icon>
+						<md-tooltip md-direction="bottom">
+							Add item
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" aria-label="Delete">
+						<md-icon md-svg-icon="static/icons/delete.svg"></md-icon>
+						<md-tooltip md-direction="bottom">
+							Delete item(s)
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" aria-label="Upload" hide-xs>
+						<md-icon md-svg-icon="static/icons/cloud_upload.svg"></md-icon>
+						<md-tooltip md-direction="bottom">
+							Upload
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" aria-label="Download" hide-xs>
+						<md-icon md-svg-icon="static/icons/cloud_download.svg"></md-icon>
+						<md-tooltip md-direction="bottom">
+							Download
+						</md-tooltip>
+					</md-button>
+
+					<md-menu md-position-mode="target-right target" hide-gt-xs>
+						<md-button class="md-icon-button" aria-label="More" ng-click="$mdOpenMenu($event)">
+							<md-icon  md-menu-origin="" md-svg-icon="static/icons/more_vert.svg"></md-icon>
+						</md-button>
+
+						<md-menu-content width="4">
+							<md-menu-item>
+								<md-button>
+									<div layout="row" flex="">
+										<p flex="">Upload</p>
+										<md-icon md-menu-align-target="" md-svg-icon="static/icons/cloud_upload_black.svg" style="margin: auto 3px auto 0;"></md-icon>
+									</div>
+								</md-button>
+							</md-menu-item>
+
+							<md-menu-item>
+								<md-button>
+									<div layout="row" flex="">
+										<p flex="">Download</p>
+										<md-icon md-menu-align-target="" md-svg-icon="static/icons/cloud_download_black.svg" style="margin: auto 3px auto 0;"></md-icon>
+									</div>
+								</md-button>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>
+			</md-toolbar>
+
+			<!-- Bottom tabs -->
+			<div class="ext-content" flex>
+				External content for `<span>{{currentNavItem}}</span>`
+			</div>
+
+			<md-content>
+				<md-nav-bar nav-bar-aria-label="navigation links">
+					<div layout="row" layout-fill layout-align="space-around center">
+						<md-nav-item md-nav-click="goto('page1')" name="page1">
+							<md-icon md-svg-icon="static/icons/receipt.svg"></md-icon>
+							<md-tooltip md-direction="top" md-delay="1000">
+								Receipt view
+							</md-tooltip>
+
+							<!-- <span>Receipt</span> -->
+						</md-nav-item>
+
+						<md-nav-item md-nav-click="goto('page2')" name="page2">
+							<md-icon md-svg-icon="static/icons/account_circle.svg"></md-icon>
+							<md-tooltip md-direction="top" md-delay="1000">
+								Buyers view
+							</md-tooltip>
+							<!-- <span>Buyers</span> -->
+						</md-nav-item>
+						<!-- these require actual routing with ui-router or ng-route, so they won't work in the demo
+						<md-nav-item md-nav-sref="app.page4" name="page4">Page Four</md-nav-item>
+						<md-nav-item md-nav-href="#page5" name="page5">Page Five</md-nav-item>
+						-->
+					</div>
+				</md-nav-bar>
+			</md-content>
+		</section>
 
 		<!-- Dependencies -->
-		<script src="bower_components/jquery/dist/jquery.js"></script>
-		<script src="bower_components/velocity/velocity.js"></script>
-		<script src="bower_components/moment/min/moment-with-locales.js"></script>
 		<script src="bower_components/angular/angular.js"></script>
-		<script src="bower_components/lumx/dist/lumx.js"></script>
-		<script src="bower_components/mousetrap/mousetrap.js"></script>
-		<!-- <script src="js/rhaboo.min.js"></script> -->
+		<script src="bower_components/angular-aria/angular-aria.js"></script>
+		<script src="bower_components/angular-animate/angular-animate.js"></script>
+		<script src="bower_components/angular-material/angular-material.js"></script>
 
 		<!-- Bootstrap AngularJS -->
 		<script type="text/javascript">
-			var app = angular.module('myModule', ['lumx']);
+			// Include app dependency on ngMaterial
+			var app = angular.module('DebtJSApp', ['ngMaterial']);
 		</script>
 
 		<!-- Services -->
@@ -60,9 +222,10 @@
 		<script src="controllers/main.controller.js"></script>
 
 		<!-- Directives -->
+		<!--
 		<script src="views/main-header/main-header.view.js"></script>
 		<script src="views/movements-tab/movements-tab.view.js"></script>
 		<script src="views/buyers-tab/buyers-tab.view.js"></script>
-		<script src="views/settings-tab/settings-tab.view.js"></script>
+		<script src="views/settings-tab/settings-tab.view.js"></script> -->
 	</body>
 </html>
