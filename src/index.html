@@ -23,20 +23,35 @@
 					md-component-id="left"
 					md-whiteframe="4">
 			<md-toolbar class="md-theme-light">
-				<h1 class="md-toolbar-tools">Menu</h1>
+
+				<md-list>
+					<md-list-item class="md-2-line" ng-click="mainCtrl.navigateToGithub()">
+						<img ng-src="static/icons/github_logo.svg" class="md-avatar" alt="Github" />
+						<div class="md-list-item-text" layout="column">
+							<h3 style="color: white">DebtJS Version 1.0.0</h3>
+							<h4 style="color: white">By Danilo Arcidiacono</h4>
+						</div>
+					</md-list-item>
+				</md-list>
+
+<!--
+				<h1 class="md-toolbar-tools">
+					Menu
+				</h1> -->
 			</md-toolbar>
+
 			<md-content layout-padding>
 				<form layout="column">
 
-					<div layout="row">
-						<md-input-container class="md-block" flex>
+					<div>
+						<md-input-container class="md-block">
 							<label for="txtDescription">Description</label>
 							<input type="text" id="txtDescription" ng-model="data">
 						</md-input-container>
 
 						<md-input-container>
 							<label>Enter date</label>
-							<md-datepicker ng-model="myDate"></md-datepicker>
+							<md-datepicker ng-model="mainCtrl.myDate"></md-datepicker>
 						</md-input-container>
 					</div>
 
@@ -66,15 +81,6 @@
 						</md-list-item>
 
 						<md-divider ></md-divider>
-
-						<md-list-item class="md-3-line">
-							<img ng-src="static/icons/github_logo.svg" class="md-avatar" alt="Github" />
-							<div class="md-list-item-text" layout="column">
-								<h3>DebtJS Version 1.0.0</h3>
-								<h4>By Danilo Arcidiacono</h4>
-								<p>https://github.com/daniloarcidiacono/DebtJS</p>
-							</div>
-						</md-list-item>
 					</md-list>
 
 

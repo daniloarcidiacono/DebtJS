@@ -1,13 +1,18 @@
-function MainController($scope, $mdSidenav) {
+function MainController($scope, $mdSidenav, $window) {
 	this.$scope = $scope;
 	this.$mdSidenav = $mdSidenav;
-	window.setTimeout(function() {
-		$mdSidenav('left').toggle();
-	}, 0);
+	this.$window = $window;
+
+	this.myDate = new Date();
 }
 
 MainController.prototype.toggleSidenav = function() {
 	this.$mdSidenav('left').toggle();
 };
 
-app.controller('mainController', MainController, ['$scope', '$mdSidenav']);
+
+MainController.prototype.navigateToGithub = function() {
+	this.$window.location.href = "https://github.com/daniloarcidiacono/DebtJS";
+};
+
+app.controller('mainController', MainController, ['$scope', '$mdSidenav', '$window']);
