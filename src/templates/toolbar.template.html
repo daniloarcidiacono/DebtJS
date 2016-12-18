@@ -7,58 +7,45 @@
             <span data-ng-bind="$toolbarCtrl.getTitle()"></span>
         </h3>
         <span flex></span>
-        <md-button class="md-icon-button" aria-label="New">
-            <md-icon md-svg-icon="static/icons/insert_drive_file.svg"></md-icon>
-            <md-tooltip md-direction="bottom">
-                New
+
+        <!-- Visible buttons -->
+        <!-- Non overflowable buttons -->
+        <md-button class="md-icon-button"
+                   data-ng-repeat="button in $toolbarCtrl.getButtons()"
+                   data-ng-if="!button.overflow"
+                   data-ng-click="button.onClick()"
+                   aria-label="button.ariaLabel">
+            <md-icon md-svg-icon="{{ button.icon }}"></md-icon>
+            <md-tooltip md-direction="bottom" data-ng-bind="button.tooltip">
             </md-tooltip>
         </md-button>
-        <md-button class="md-icon-button" aria-label="Add">
-            <md-icon md-svg-icon="static/icons/add_circle_outline.svg"></md-icon>
-            <md-tooltip md-direction="bottom">
-                Add item
-            </md-tooltip>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Delete">
-            <md-icon md-svg-icon="static/icons/delete.svg"></md-icon>
-            <md-tooltip md-direction="bottom">
-                Delete item(s)
-            </md-tooltip>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Upload" hide-xs>
-            <md-icon md-svg-icon="static/icons/cloud_upload.svg"></md-icon>
-            <md-tooltip md-direction="bottom">
-                Upload
-            </md-tooltip>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Download" hide-xs>
-            <md-icon md-svg-icon="static/icons/cloud_download.svg"></md-icon>
-            <md-tooltip md-direction="bottom">
-                Download
+
+        <!-- Overflowable buttons -->
+        <md-button class="md-icon-button"
+                   data-ng-repeat="button in $toolbarCtrl.getButtons()"
+                   data-ng-if="button.overflow"
+                   data-ng-click="button.onClick()"
+                   aria-label="button.ariaLabel"
+                   hide-xs>
+            <md-icon md-svg-icon="{{ button.icon }}"></md-icon>
+            <md-tooltip md-direction="bottom" data-ng-bind="button.tooltip">
             </md-tooltip>
         </md-button>
 
         <!-- Overflow menu -->
         <md-menu md-position-mode="target-right target" hide-gt-xs>
+            <!-- Overflow button -->
             <md-button class="md-icon-button" aria-label="More" ng-click="$mdOpenMenu($event)">
                 <md-icon  md-menu-origin="" md-svg-icon="static/icons/more_vert.svg"></md-icon>
             </md-button>
 
             <md-menu-content width="4">
-                <md-menu-item>
+                <!-- Overflowable buttons only -->
+                <md-menu-item data-ng-repeat="button in $toolbarCtrl.getButtons()" data-ng-if="button.overflow">
                     <md-button>
-                        <div layout="row" flex="">
-                            <p flex="">Upload</p>
-                            <md-icon md-menu-align-target="" md-svg-icon="static/icons/cloud_upload_black.svg" style="margin: auto 3px auto 0;"></md-icon>
-                        </div>
-                    </md-button>
-                </md-menu-item>
-
-                <md-menu-item>
-                    <md-button>
-                        <div layout="row" flex="">
-                            <p flex="">Download</p>
-                            <md-icon md-menu-align-target="" md-svg-icon="static/icons/cloud_download_black.svg" style="margin: auto 3px auto 0;"></md-icon>
+                        <div layout="row" flex>
+                            <p flex data-ng-bind="button.tooltip"></p>
+                            <md-icon md-menu-align-target="" md-svg-icon="{{ button.iconOverflow || button.icon }}" style="margin: auto 3px auto 0;"></md-icon>
                         </div>
                     </md-button>
                 </md-menu-item>

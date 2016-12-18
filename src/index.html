@@ -25,10 +25,11 @@
 			<!-- Toolbar -->
 			<debtjs-toolbar></debtjs-toolbar>
 
-			<!-- Bottom tabs -->
-			<div id="currentPage" class="ext-content" flex ng-view>
-			</div>
+			<!-- Tab content -->
+			<md-content id="currentPage" class="ext-content" layout-padding flex ng-view>
+			</md-content>
 
+            <!-- Bottom tabs -->
 			<md-content>
 				<md-nav-bar md-selected-nav-item="mainCtrl.tabsService.currentNavItem" nav-bar-aria-label="navigation links">
 					<div layout="row" layout-fill layout-align="space-around center">

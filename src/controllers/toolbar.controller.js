@@ -15,4 +15,9 @@ ToolbarController.prototype.getTitle = function() {
     return ctrl !== undefined ? ctrl.getTabTitle() : "";
 };
 
+ToolbarController.prototype.getButtons = function() {
+    var ctrl = angular.element("#currentPage").controller();
+    return ctrl !== undefined ? ctrl.getToolbarButtons() : [];
+};
+
 app.controller('toolbarController', ToolbarController, ['$scope', '$mdSidenav', 'TabsService', 'DocumentService', 'ConfigService']);
