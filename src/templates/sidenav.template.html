@@ -36,7 +36,7 @@
             <md-input-container>
                 <label>Buyer</label>
                 <md-select ng-model="$sidenavCtrl.getDocument().buyer">
-                    <md-option ng-repeat="buyer in $sidenavCtrl.getDocument().buyers">
+                    <md-option ng-value="buyer" ng-repeat="buyer in $sidenavCtrl.getDocument().buyers">
                         {{ buyer.name }}
                     </md-option>
                 </md-select>
