@@ -3,7 +3,7 @@ function TabsService($rootScope) {
 
 	var self = this;
 	$rootScope.$on('$routeChangeSuccess', function(event, current) {
-		self.currentNavItem = current.locals.$template.toLowerCase();
+		self.currentNavItem = current.locals.$template.toLowerCase().trim();
 	});
 }
 
