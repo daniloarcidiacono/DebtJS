@@ -10,6 +10,10 @@ SidenavController.prototype.toggleSidenav = function() {
     this.$mdSidenav("left").toggle();
 };
 
+SidenavController.prototype.closeSidenav = function() {
+    this.$mdSidenav("left").close();
+};
+
 SidenavController.prototype.navigateToGithub = function() {
     this.$window.location.href = this.configService.getGithubLink();
 };

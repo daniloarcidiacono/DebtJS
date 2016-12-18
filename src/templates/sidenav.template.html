@@ -1,6 +1,7 @@
 <md-sidenav class="md-sidenav-left"
             md-component-id="left"
-            md-whiteframe="4">
+            md-whiteframe="4"
+            md-swipe-left="$sidenavCtrl.closeSidenav()">
     <md-toolbar class="md-theme-light">
         <md-list>
             <md-list-item class="md-2-line" ng-click="$sidenavCtrl.navigateToGithub()">
@@ -23,7 +24,7 @@
             <div>
                 <md-input-container class="md-block">
                     <label for="txtDescription">Description</label>
-                    <input type="text" id="txtDescription" ng-model="data">
+                    <input type="text" id="txtDescription" ng-model="$sidenavCtrl.getDocument().title">
                 </md-input-container>
 
                 <md-input-container>
@@ -34,19 +35,12 @@
 
             <md-input-container>
                 <label>Buyer</label>
-                <md-select ng-model="ctrl.userState">
-                    <md-option>
-                        Danilo
-                    </md-option>
-                    <md-option>
-                        Stefano
-                    </md-option>
-                    <md-option>
-                        Rosario
+                <md-select ng-model="$sidenavCtrl.getDocument().buyer">
+                    <md-option ng-repeat="buyer in $sidenavCtrl.getDocument().buyers">
+                        {{ buyer.name }}
                     </md-option>
                 </md-select>
             </md-input-container>
-
 
             <md-list>
                 <md-list-item class="md-2-line">
@@ -60,7 +54,6 @@
                 <md-divider ></md-divider>
             </md-list>
 
-
             <!--
             <md-input-container class="md-3-line">
                 <md-switch class="md-primary md-3-line" md-no-ink ng-model="message.selected">
@@ -71,10 +64,5 @@
                 </md-switch>
             </md-input-container>-->
         </form>
-        <!--
-        <md-button ng-click="close()" class="md-primary">
-            Close Sidenav Right
-        </md-button>
-        -->
     </md-content>
 </md-sidenav>
