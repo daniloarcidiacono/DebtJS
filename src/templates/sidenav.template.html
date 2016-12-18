@@ -1,0 +1,80 @@
+<md-sidenav class="md-sidenav-left"
+            md-component-id="left"
+            md-whiteframe="4">
+    <md-toolbar class="md-theme-light">
+        <md-list>
+            <md-list-item class="md-2-line" ng-click="$sidenavCtrl.navigateToGithub()">
+                <img ng-src="static/icons/github_logo.svg" class="md-avatar" alt="Github" />
+                <div class="md-list-item-text" layout="column">
+                    <h3 style="color: white">DebtJS v{{ $sidenavCtrl.getAppVersion() }}</h3>
+                    <h4 style="color: white">By {{ $sidenavCtrl.getAuthor() }} </h4>
+                </div>
+            </md-list-item>
+        </md-list>
+
+        <!--
+                        <h1 class="md-toolbar-tools">
+                            Menu
+                        </h1> -->
+    </md-toolbar>
+
+    <md-content layout-padding>
+        <form layout="column">
+            <div>
+                <md-input-container class="md-block">
+                    <label for="txtDescription">Description</label>
+                    <input type="text" id="txtDescription" ng-model="data">
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Enter date</label>
+                    <md-datepicker ng-model="$sidenavCtrl.getDocument().date"></md-datepicker>
+                </md-input-container>
+            </div>
+
+            <md-input-container>
+                <label>Buyer</label>
+                <md-select ng-model="ctrl.userState">
+                    <md-option>
+                        Danilo
+                    </md-option>
+                    <md-option>
+                        Stefano
+                    </md-option>
+                    <md-option>
+                        Rosario
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+
+            <md-list>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3>Local storage</h3>
+                        <p>Use local storage to save the current data</p>
+                    </div>
+                    <md-switch class="md-primary" ng-model="setting.enabled"></md-switch>
+                </md-list-item>
+
+                <md-divider ></md-divider>
+            </md-list>
+
+
+            <!--
+            <md-input-container class="md-3-line">
+                <md-switch class="md-primary md-3-line" md-no-ink ng-model="message.selected">
+                    <h3>Local storage</h3>
+                    <h4>Local storage</h4>
+                    <p>Local storage</p>
+
+                </md-switch>
+            </md-input-container>-->
+        </form>
+        <!--
+        <md-button ng-click="close()" class="md-primary">
+            Close Sidenav Right
+        </md-button>
+        -->
+    </md-content>
+</md-sidenav>

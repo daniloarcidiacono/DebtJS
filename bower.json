@@ -18,7 +18,9 @@
   "dependencies": {
     "angular": "^1.5.7",
     "angular-material": "master",
-    "moment": "^2.17.1"
+    "moment": "^2.17.1",
+    "angular-route": "^1.6.0",
+    "jquery": "^3.1.1"
   },
   "version": "1.2.0"
 }
