@@ -1,6 +1,8 @@
 <md-toolbar class="md-hue-2" flex-none>
     <div class="md-toolbar-tools">
-        <md-button class="md-icon-button" aria-label="Settings" data-ng-click="$toolbarCtrl.toggleSidenav()">
+        <md-button class="md-icon-button"
+                   aria-label="Settings"
+                   data-ng-click="$toolbarCtrl.toggleSidenav()">
             <md-icon md-svg-icon="static/icons/menu.svg"></md-icon>
         </md-button>
         <h3>
@@ -14,9 +16,13 @@
                    data-ng-repeat="button in $toolbarCtrl.getButtons()"
                    data-ng-if="!button.overflow"
                    data-ng-click="button.onClick()"
+                   data-ng-disabled="button.enabledFunction && !button.enabledFunction()"
                    aria-label="button.ariaLabel">
-            <md-icon md-svg-icon="{{ button.icon }}"></md-icon>
-            <md-tooltip md-direction="bottom" data-ng-bind="button.tooltip">
+            <md-icon md-svg-icon="{{ button.icon }}"
+                     data-ng-class="{ 'toolbar-button-disabled': button.enabledFunction && !button.enabledFunction() }">
+            </md-icon>
+            <md-tooltip md-direction="bottom"
+                        data-ng-bind="button.tooltip">
             </md-tooltip>
         </md-button>
 
@@ -25,9 +31,12 @@
                    data-ng-repeat="button in $toolbarCtrl.getButtons()"
                    data-ng-if="button.overflow"
                    data-ng-click="button.onClick()"
+                   data-ng-disabled="button.enabledFunction && !button.enabledFunction()"
                    aria-label="button.ariaLabel"
                    hide-xs>
-            <md-icon md-svg-icon="{{ button.icon }}"></md-icon>
+            <md-icon md-svg-icon="{{ button.icon }}"
+                     data-ng-class="{ 'toolbar-button-disabled': button.enabledFunction && !button.enabledFunction() }">
+            </md-icon>
             <md-tooltip md-direction="bottom" data-ng-bind="button.tooltip">
             </md-tooltip>
         </md-button>
@@ -36,18 +45,28 @@
         <md-menu md-position-mode="target-right target"
                  data-ng-if="$toolbarCtrl.isAnyOverflowableButton()"
                  hide-gt-xs>
+
             <!-- Overflow button -->
-            <md-button class="md-icon-button" aria-label="More" ng-click="$mdOpenMenu($event)">
-                <md-icon  md-menu-origin="" md-svg-icon="static/icons/more_vert.svg"></md-icon>
+            <md-button class="md-icon-button"
+                       aria-label="More"
+                       ng-click="$mdOpenMenu($event)">
+                <md-icon md-menu-origin=""
+                         md-svg-icon="static/icons/more_vert.svg">
+                </md-icon>
             </md-button>
 
             <md-menu-content width="4">
                 <!-- Overflowable buttons only -->
-                <md-menu-item data-ng-repeat="button in $toolbarCtrl.getButtons()" data-ng-if="button.overflow">
-                    <md-button>
+                <md-menu-item data-ng-repeat="button in $toolbarCtrl.getButtons()"
+                              data-ng-if="button.overflow">
+                    <md-button data-ng-disabled="button.enabledFunction && !button.enabledFunction()">
                         <div layout="row" flex>
                             <p flex data-ng-bind="button.tooltip"></p>
-                            <md-icon md-menu-align-target="" md-svg-icon="{{ button.iconOverflow || button.icon }}" style="margin: auto 3px auto 0;"></md-icon>
+                            <md-icon md-menu-align-target=""
+                                     md-svg-icon="{{ button.iconOverflow || button.icon }}"
+                                     style="margin: auto 3px auto 0;"
+                                     data-ng-class="{ 'toolbar-button-disabled': button.enabledFunction && !button.enabledFunction() }">
+                            </md-icon>
                         </div>
                     </md-button>
                 </md-menu-item>

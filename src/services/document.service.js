@@ -109,15 +109,6 @@ DocumentService.prototype.removeSelectedBuyers = function() {
 	}
 };
 
-DocumentService.prototype.getTotalAmount = function() {
-	var result = 0;
-	for (var i = 0; i < this.rowData.length; i++) {
-		result += parseFloat(this.rowData[i].amount) * parseInt(this.rowData[i].quantity);
-	}
-
-	return result;
-};
-
 // Returns the total amount
 DocumentService.prototype.getTotalAmount = function() {
 	var result = 0;
@@ -170,6 +161,10 @@ DocumentService.prototype.formatDate = function(date) {
 	if (mm < 10) { mm = "0" + mm; }
 
 	return dd + "_" + mm + "_" + date.getFullYear();
+};
+
+DocumentService.prototype.getItemCount = function() {
+	return this.rowData.length;
 };
 
 DocumentService.prototype.getData = function() {

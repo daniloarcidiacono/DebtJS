@@ -1,10 +1,21 @@
 <md-content>
     <md-list flex>
-        <md-list-item data-ng-repeat="i in [1,2,3]">
-            <md-checkbox class="md-primary"></md-checkbox>
-            <h3>Danilo</h3>
+        <md-list-item data-ng-repeat="buyer in $buyersCtrl.getEntries()">
+            <md-checkbox class="md-primary"
+                         data-ng-model="buyer.isSelected">
+
+            </md-checkbox>
+
+            <input data-ng-model="buyer.name"
+                   data-ng-click="$event.stopPropagation()"
+                   type="text"
+                   md-autofocus
+                   placeholder="Name"
+                   flex>
+
+            <!-- <h3 data-ng-model="buyer.name"></h3> -->
             <div class="md-secondary">
-                3.35 €
+                {{ $buyersCtrl.getBuyerTotal(buyer) | number: 2 }} €
             </div>
         </md-list-item>
     </md-list>

@@ -8,6 +8,7 @@ function ReceiptsController($scope, DialogsService, DocumentService, ConfigServi
             "ariaLabel": "New",
             "icon": "static/icons/insert_drive_file.svg",
             "tooltip": "New",
+            "enabledFunction": this.isDocumentTouched.bind(this),
             "onClick": this.onNewClicked.bind(this)
         },
         {
@@ -20,6 +21,7 @@ function ReceiptsController($scope, DialogsService, DocumentService, ConfigServi
             "ariaLabel": "Delete",
             "icon": "static/icons/delete.svg",
             "tooltip": "Delete item(s)",
+            "enabledFunction": this.hasEntriesSelected.bind(this),
             "onClick": this.onDeleteClicked.bind(this)
         },
         {
@@ -27,6 +29,7 @@ function ReceiptsController($scope, DialogsService, DocumentService, ConfigServi
             "icon": "static/icons/cloud_upload.svg",
             "iconOverflow": "static/icons/cloud_upload_black.svg",
             "tooltip": "Upload",
+            "enabledFunction": this.isDocumentTouched.bind(this),
             "onClick": this.onUploadClicked.bind(this),
             "overflow": true
         },
@@ -41,7 +44,16 @@ function ReceiptsController($scope, DialogsService, DocumentService, ConfigServi
     ];
 }
 
+ReceiptsController.prototype.isDocumentTouched = function() {
+    return this.documentService.getItemCount() !== 0;
+};
+
 ReceiptsController.prototype.getTabTitle = function() {
+    var total = this.documentService.getTotalAmount();
+    if (total > 0){
+        return "Receipts (" + total + " €)";
+    }
+
     return "Receipts";
 };
 
@@ -76,6 +88,10 @@ ReceiptsController.prototype.onEntryClicked = function(ev, entry) {
     ev.stopPropagation();
 };
 
+ReceiptsController.prototype.hasEntriesSelected = function() {
+    return this.documentService.getSelectedItemsCount() > 0;
+};
+
 ReceiptsController.prototype.getEntries = function() {
     return this.documentService.getData();
 };
@@ -85,7 +101,21 @@ ReceiptsController.prototype.hasEntries = function() {
 };
 
 ReceiptsController.prototype.onNewClicked = function() {
-    console.debug("onNewClicked");
+    var self = this;
+
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = this.dialogsService.$mdDialog.confirm()
+        .title('Create new document?')
+        .textContent('All data will be lost.')
+        .ariaLabel('New document')
+        .ok('Start from scratch')
+        .cancel('Keep it');
+
+    this.dialogsService.$mdDialog.show(confirm).then(function() {
+        self.documentService.reset();
+    }, function() {
+        // User has canceled
+    });
 };
 
 ReceiptsController.prototype.onAddClicked = function() {
@@ -99,7 +129,21 @@ ReceiptsController.prototype.onAddClicked = function() {
 };
 
 ReceiptsController.prototype.onDeleteClicked = function() {
-    console.debug("onDeleteClicked");
+    var self = this;
+
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = this.dialogsService.$mdDialog.confirm()
+        .title('Remove selected items?')
+        .textContent('This operation cannot be undone.')
+        .ariaLabel('Remove items')
+        .ok('Remove')
+        .cancel('Keep them');
+
+    this.dialogsService.$mdDialog.show(confirm).then(function() {
+        self.documentService.removeSelectedItems();
+    }, function() {
+        // User has canceled
+    });
 };
 
 ReceiptsController.prototype.onUploadClicked = function() {
