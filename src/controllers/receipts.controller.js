@@ -1,6 +1,6 @@
-function ReceiptsController($scope, TabsService, DocumentService, ConfigService) {
+function ReceiptsController($scope, DialogsService, DocumentService, ConfigService) {
     this.$scope = $scope;
-    this.tabsService = TabsService;
+    this.dialogsService = DialogsService;
     this.documentService = DocumentService;
     this.configService = ConfigService;
     this.toolbarButtons = [
@@ -8,26 +8,26 @@ function ReceiptsController($scope, TabsService, DocumentService, ConfigService)
             "ariaLabel": "New",
             "icon": "static/icons/insert_drive_file.svg",
             "tooltip": "New",
-            "onClick": this.onNewClicked
+            "onClick": this.onNewClicked.bind(this)
         },
         {
             "ariaLabel": "Add",
             "icon": "static/icons/add_circle_outline.svg",
             "tooltip": "Add item",
-            "onClick": this.onAddClicked
+            "onClick": this.onAddClicked.bind(this)
         },
         {
             "ariaLabel": "Delete",
             "icon": "static/icons/delete.svg",
             "tooltip": "Delete item(s)",
-            "onClick": this.onDeleteClicked
+            "onClick": this.onDeleteClicked.bind(this)
         },
         {
             "ariaLabel": "Upload",
             "icon": "static/icons/cloud_upload.svg",
             "iconOverflow": "static/icons/cloud_upload_black.svg",
             "tooltip": "Upload",
-            "onClick": this.onUploadClicked,
+            "onClick": this.onUploadClicked.bind(this),
             "overflow": true
         },
         {
@@ -35,7 +35,7 @@ function ReceiptsController($scope, TabsService, DocumentService, ConfigService)
             "icon": "static/icons/cloud_download.svg",
             "iconOverflow": "static/icons/cloud_download_black.svg",
             "tooltip": "Download",
-            "onClick": this.onDownloadClicked,
+            "onClick": this.onDownloadClicked.bind(this),
             "overflow": true
         }
     ];
@@ -49,12 +49,32 @@ ReceiptsController.prototype.getToolbarButtons = function() {
     return this.toolbarButtons;
 };
 
+ReceiptsController.prototype.onEntryClicked = function(ev, entry) {
+    var entryCopy = angular.copy(entry);
+    this.dialogsService.showEntryDetailsDialog(ev, entryCopy).then(function(entryEdited) {
+       angular.copy(entryEdited, entry);
+    }).catch(function() {
+        // User has canceled
+    });
+
+    // http://stackoverflow.com/questions/37350828/multiple-elements-with-ng-click-within-in-md-list-item
+    ev.stopPropagation();
+};
+
 ReceiptsController.prototype.onNewClicked = function() {
     console.debug("onNewClicked");
 };
 
 ReceiptsController.prototype.onAddClicked = function() {
-    console.debug("onAddClicked");
+    var self = this;
+
+    var entry = this.documentService.instanceEmptyEntry();
+    this.dialogsService.showEntryDetailsDialog(undefined, entry).then(function() {
+        console.debug(entry);
+        //self.documentService.addItem(entry);
+    }).catch(function() {
+        // User has canceled
+    });
 };
 
 ReceiptsController.prototype.onDeleteClicked = function() {
@@ -69,4 +89,4 @@ ReceiptsController.prototype.onDownloadClicked = function() {
     console.debug("onDownloadClicked");
 };
 
-app.controller('receiptsController', ReceiptsController, ['$scope', 'TabsService', 'DocumentService', 'ConfigService']);
+app.controller('receiptsController', ReceiptsController, ['$scope', 'DialogsService', 'DocumentService', 'ConfigService']);

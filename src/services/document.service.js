@@ -42,7 +42,7 @@ DocumentService.prototype.removeSelectedItems = function() {
 	}
 };
 
-DocumentService.prototype.addItem = function() {
+DocumentService.prototype.instanceEmptyEntry = function() {
 	var entry = {
 		"isSelected": false,
 		"amount": 0,
@@ -54,7 +54,13 @@ DocumentService.prototype.addItem = function() {
 		entry[this.buyers[i].name] = false;
 	}
 
+	return entry;
+};
+
+DocumentService.prototype.addItem = function(entry) {
+	entry = entry || this.instanceEmptyEntry();
 	this.rowData.push(entry);
+	return entry;
 };
 
 DocumentService.prototype.addBuyer = function() {

@@ -8,13 +8,13 @@ function BuyersController($scope, TabsService, DocumentService, ConfigService) {
             "ariaLabel": "Add",
             "icon": "static/icons/add_circle_outline.svg",
             "tooltip": "Add item",
-            "onClick": this.onAddClicked
+            "onClick": this.onAddClicked.bind(this)
         },
         {
             "ariaLabel": "Delete",
             "icon": "static/icons/delete.svg",
             "tooltip": "Delete item(s)",
-            "onClick": this.onDeleteClicked
+            "onClick": this.onDeleteClicked.bind(this)
         }
     ];
 }

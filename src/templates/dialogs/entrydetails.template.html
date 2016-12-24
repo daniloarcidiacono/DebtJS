@@ -1,0 +1,62 @@
+<md-dialog aria-label="Edit entry">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 class="entrydetails-ellipsis">Edit "{{ $entryDetailsCtrl.entry.description }}"</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="$entryDetailsCtrl.cancel()">
+                    <md-icon md-svg-src="static/icons/close.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content md-no-momentum">
+                <!-- Description -->
+                <md-input-container class="md-icon-float md-block">
+                    <label>Description</label>
+                    <md-icon md-svg-src="static/icons/description.svg" class="entrydetails-description-icon"></md-icon>
+                    <input ng-model="$entryDetailsCtrl.entry.description" type="text" md-autofocus>
+                </md-input-container>
+
+                <!-- Buyers -->
+                <md-input-container class="md-icon-float md-block">
+                    <label>Buyers</label>
+                    <md-icon md-svg-src="static/icons/account_circle.svg" class="entrydetails-buyers-icon"></md-icon>
+                    <md-select ng-model="$entryDetailsCtrl.entry.buyers" multiple>
+                        <md-optgroup label="Buyers">
+                            <md-option data-ng-repeat="buyer in $entryDetailsCtrl.documentService.buyers"
+                                       data-ng-value="buyer"
+                                       data-ng-bind="buyer.name">
+                            </md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-input-container>
+
+                <!-- Amount -->
+                <md-input-container md-no-float class="md-block">
+                    <label>Amount</label>
+                    <md-icon md-svg-src="static/icons/euro.svg" class="entrydetails-amount-icon"></md-icon>
+                    <input ng-model="$entryDetailsCtrl.entry.amount" type="number" step="0.01">
+                </md-input-container>
+
+                <!-- Quantity -->
+                <md-input-container md-no-float class="md-block">
+                    <label>Quantity</label>
+                    <md-icon md-svg-src="static/icons/content_copy.svg" class="entrydetails-quantity-icon"></md-icon>
+                    <input ng-model="$entryDetailsCtrl.entry.quantity" min="1" type="number" step="1">
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button class="md-raised md-primary" ng-click="$entryDetailsCtrl.accept()">
+                Ok
+            </md-button>
+            <md-button ng-click="$entryDetailsCtrl.reject()">
+                Cancel
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -1,0 +1,22 @@
+/** Fixes overflow on entrydetails dialog h2 toolbar title */
+.entrydetails-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.entrydetails-description-icon svg {
+    fill: dodgerblue;
+}
+
+.entrydetails-buyers-icon svg {
+    fill: dodgerblue;
+}
+
+.entrydetails-quantity-icon svg {
+    fill: dodgerblue;
+}
+
+.entrydetails-amount-icon svg {
+    fill: dodgerblue;
+}
