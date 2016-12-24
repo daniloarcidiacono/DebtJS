@@ -21,10 +21,12 @@ DocumentService.prototype.editBuyer = function(oldBuyer, newBuyer) {
         return;
     }
 
+    // Replace the current buyer if it is the one that is changing
     if (this.buyer.name === oldBuyer.name) {
         angular.copy(newBuyer, this.buyer);
     }
 
+    // Remove the buyer key in rows
     for (var i = 0; i < this.rowData.length; i++) {
         if (this.rowData[i][oldBuyer.name] !== undefined) {
             this.rowData[i][newBuyer.name] = this.rowData[i][oldBuyer.name];
@@ -32,6 +34,7 @@ DocumentService.prototype.editBuyer = function(oldBuyer, newBuyer) {
         }
     }
 
+    // Replace the buyer in buyers array
     angular.copy(newBuyer, oldBuyer);
 };
 
