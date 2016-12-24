@@ -9,8 +9,13 @@
 
             <div data-ng-bind="buyer.name"></div>
 
-            <div class="md-secondary">
-                {{ $buyersCtrl.getBuyerTotal(buyer) | number: 2 }} €
+            <div class="md-secondary buyers-earning"
+                 data-ng-if="!$buyersCtrl.isCurrentBuyer(buyer)" >
+                + {{ $buyersCtrl.getBuyerDebt(buyer) | number:2 }} €
+            </div>
+            <div class="md-secondary buyers-debt"
+                 data-ng-if="$buyersCtrl.isCurrentBuyer(buyer)" >
+                - {{ $buyersCtrl.getBuyerDebt(buyer) | number:2 }} €
             </div>
         </md-list-item>
     </md-list>

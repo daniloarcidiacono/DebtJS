@@ -1,0 +1,23 @@
+/** Fixes overflow on import dialog h2 toolbar title */
+.import-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.import-noentries-text {
+    color: #CCC;
+    text-align: center;
+}
+.import-noentries-icon {
+    width: 10em;
+    height: 10em;
+}
+
+.import-noentries-icon svg {
+    fill: #CCC;
+}
+
+.import-delete-icon svg {
+    fill: gray;
+}

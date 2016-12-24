@@ -57,4 +57,40 @@ DialogsService.prototype.showBuyerDetailsDialog = function(ev, buyer) {
 	return deferred.promise;
 };
 
+DialogsService.prototype.showImportDialog = function(ev) {
+	var deferred = this.$q.defer();
+
+	this.$mdDialog.show({
+		controller: "importController as $importCtrl",
+		templateUrl: 'templates/dialogs/import.template.html',
+		parent: angular.element(document.body),
+		targetEvent: ev,
+		clickOutsideToClose: true,
+		fullscreen: true
+	}).then(function(pickedPaste) {
+		if (pickedPaste !== undefined) {
+			deferred.resolve(pickedPaste);
+		} else {
+			deferred.reject();
+		}
+	}, function() {
+		deferred.reject();
+	});
+
+	return deferred.promise;
+};
+
+DialogsService.prototype.showError = function(options) {
+	this.$mdDialog.show(
+		this.$mdDialog.alert()
+			.parent(options.parent || angular.element(document.body))
+			.clickOutsideToClose(true)
+			.title(options.title || 'Error')
+			.textContent(options.textContent || "error")
+			.ariaLabel(options.ariaLabel || 'Error')
+			.ok(options.ok || 'Dismiss')
+	);
+}
+
+
 app.service('DialogsService', DialogsService, ['$mdDialog', '$q']);

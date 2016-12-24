@@ -20,7 +20,8 @@
     "angular-material": "master",
     "moment": "^2.17.1",
     "angular-route": "^1.6.0",
-    "jquery": "^3.1.1"
+    "jquery": "^3.1.1",
+    "mousetrap": "^1.6.0"
   },
   "version": "1.2.0"
 }

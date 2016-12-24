@@ -49,7 +49,7 @@
             <!-- Overflow button -->
             <md-button class="md-icon-button"
                        aria-label="More"
-                       ng-click="$mdOpenMenu($event)">
+                       data-ng-click="$mdOpenMenu($event)">
                 <md-icon md-menu-origin=""
                          md-svg-icon="static/icons/more_vert.svg">
                 </md-icon>
@@ -59,7 +59,8 @@
                 <!-- Overflowable buttons only -->
                 <md-menu-item data-ng-repeat="button in $toolbarCtrl.getButtons()"
                               data-ng-if="button.overflow">
-                    <md-button data-ng-disabled="button.enabledFunction && !button.enabledFunction()">
+                    <md-button data-ng-disabled="button.enabledFunction && !button.enabledFunction()"
+                               data-ng-click="button.onClick()">
                         <div layout="row" flex>
                             <p flex data-ng-bind="button.tooltip"></p>
                             <md-icon md-menu-align-target=""

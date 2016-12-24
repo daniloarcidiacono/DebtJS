@@ -15,6 +15,17 @@ DocumentService.prototype.reset = function() {
 	this.dateFormatted = moment().locale(this.locale).format('LL');
 };
 
+DocumentService.prototype.setFromObject = function(obj) {
+    this.rowData = obj.rowData;
+    this.buyers = obj.buyers;
+    this.buyer = obj.buyer;
+    this.version = obj.version;
+    this.title = obj.title;
+    this.locale = obj.locale;
+    this.date = obj.date;
+    this.dateFormatted = obj.dateFormatted;
+};
+
 DocumentService.prototype.getExportTitle = function() {
 	return this.title.toLowerCase().replace(' ', '') + "_" + this.formatDate(this.date);
 };

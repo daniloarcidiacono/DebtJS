@@ -13,3 +13,11 @@
 .buyers-noentries-icon svg {
     fill: #CCC;
 }
+
+.buyers-earning {
+    color: green;
+}
+
+.buyers-debt {
+    color: red;
+}

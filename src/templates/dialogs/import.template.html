@@ -1,0 +1,64 @@
+<md-dialog aria-label="Pick a paste">
+    <form ng-cloak id="importDialog">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 class="import-ellipsis">Pick a paste</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="$importCtrl.cancel()">
+                    <md-icon md-svg-src="static/icons/close.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content layout="column" layout-align="center center" layout-fill>
+            <!-- Spinner -->
+            <md-progress-linear md-mode="indeterminate"
+                                  data-ng-if="$importCtrl.isLoading()"
+                                  flex="none">
+            </md-progress-linear>
+
+            <!-- Pastes -->
+            <md-list data-ng-if="$importCtrl.hasPastes()"
+                     flex>
+                <md-list-item data-ng-repeat="paste in $importCtrl.getPastes()"
+                              data-ng-click="$importCtrl.accept(paste)">
+
+                    <div data-ng-bind="paste.name"></div>
+
+                    <div class="md-secondary">
+                        <md-button class="md-icon-button"
+                                   data-ng-click="$importCtrl.deletePaste($event, paste)"
+                                   aria-label="Delete paste">
+                            <md-icon class="import-delete-icon"
+                                     md-svg-icon="static/icons/delete.svg">
+                            </md-icon>
+                            <md-tooltip md-direction="left">
+                                Delete
+                            </md-tooltip>
+                        </md-button>
+                    </div>
+                </md-list-item>
+            </md-list>
+
+            <!-- No pastes -->
+            <div data-ng-if="!$importCtrl.isLoading() && !$importCtrl.hasPastes()"
+                 layout="column"
+                 layout-align="space-around stretch"
+                 layout-fill
+                 flex>
+                <div flex></div>
+                <md-icon flex-none md-svg-icon="static/icons/receipt.svg" class="import-noentries-icon"></md-icon>
+                <h1 flex-none class="md-display-3 import-noentries-text">No pastes</h1>
+                <div flex></div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button class="md-raised md-secondary" ng-click="$importCtrl.reject()">
+                Cancel
+            </md-button>
+            <span flex></span>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -7,7 +7,7 @@ function PasteBinService($http, $q) {
 PasteBinService.prototype.createPastebin = function(pasteTitle, pasteJsonContent) {
 	var req = {
 		method: 'POST',
-		url: 'http://192.168.56.1:888/DebtJS/create.php',
+		url: 'http://debtjs.altervista.org/pastebin/create.php',
 		headers: {
 			'Content-Type': 'application/json'
 		},
@@ -33,7 +33,7 @@ PasteBinService.prototype.createPastebin = function(pasteTitle, pasteJsonContent
 PasteBinService.prototype.listPastebins = function() {
 	var req = {
 		method: 'GET',
-		url: 'http://192.168.56.1:888/DebtJS/list.php',
+		url: 'http://debtjs.altervista.org/pastebin/list.php',
 		headers: {
 			'Content-Type': 'text/plain'
 		}
@@ -55,7 +55,7 @@ PasteBinService.prototype.listPastebins = function() {
 PasteBinService.prototype.getPaste = function(pasteKey) {
 	var req = {
 		method: 'GET',
-		url: 'http://192.168.56.1:888/DebtJS/read.php?id=' + pasteKey,
+		url: 'http://debtjs.altervista.org/pastebin/read.php?id=' + pasteKey,
 		headers: {
 			'Content-Type': 'text/plain'
 		}
@@ -77,7 +77,7 @@ PasteBinService.prototype.getPaste = function(pasteKey) {
 PasteBinService.prototype.deletePaste = function(pasteKey) {
 	var req = {
 		method: 'DELETE',
-		url: 'http://192.168.56.1:888/DebtJS/delete.php?id=' + pasteKey,
+		url: 'http://debtjs.altervista.org/pastebin/delete.php?id=' + pasteKey,
 		headers: {
 			'Content-Type': 'text/plain'
 		}

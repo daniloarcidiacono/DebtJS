@@ -1,26 +1,28 @@
-function ReceiptsController($scope, DialogsService, DocumentService, ConfigService) {
+function ReceiptsController($scope, $filter, DialogsService, DocumentService, PasteBinService, ConfigService) {
     this.$scope = $scope;
+    this.$filter = $filter;
     this.dialogsService = DialogsService;
     this.documentService = DocumentService;
+    this.pasteBinService = PasteBinService;
     this.configService = ConfigService;
     this.toolbarButtons = [
         {
             "ariaLabel": "New",
             "icon": "static/icons/insert_drive_file.svg",
-            "tooltip": "New",
+            "tooltip": "New (alt + N)",
             "enabledFunction": this.isDocumentTouched.bind(this),
             "onClick": this.onNewClicked.bind(this)
         },
         {
             "ariaLabel": "Add",
             "icon": "static/icons/add_circle_outline.svg",
-            "tooltip": "Add item",
+            "tooltip": "Add item (alt + enter)",
             "onClick": this.onAddClicked.bind(this)
         },
         {
             "ariaLabel": "Delete",
             "icon": "static/icons/delete.svg",
-            "tooltip": "Delete item(s)",
+            "tooltip": "Delete item(s) (canc)",
             "enabledFunction": this.hasEntriesSelected.bind(this),
             "onClick": this.onDeleteClicked.bind(this)
         },
@@ -42,6 +44,16 @@ function ReceiptsController($scope, DialogsService, DocumentService, ConfigServi
             "overflow": true
         }
     ];
+
+    this.$scope.$on('$routeChangeStart', function(next, current) {
+        Mousetrap.unbind('alt+n');
+        Mousetrap.unbind('alt+enter');
+        Mousetrap.unbind('del');
+    });
+
+    Mousetrap.bind('alt+n', this.onNewClicked.bind(this));
+    Mousetrap.bind('alt+enter', this.onAddClicked.bind(this));
+    Mousetrap.bind('del', this.onDeleteClicked.bind(this));
 }
 
 ReceiptsController.prototype.isDocumentTouched = function() {
@@ -50,8 +62,8 @@ ReceiptsController.prototype.isDocumentTouched = function() {
 
 ReceiptsController.prototype.getTabTitle = function() {
     var total = this.documentService.getTotalAmount();
-    if (total > 0){
-        return "Receipts (" + total + " €)";
+    if (total > 0) {
+        return "Receipts (" + this.$filter('number')(total, 2) + " €)";
     }
 
     return "Receipts";
@@ -151,7 +163,38 @@ ReceiptsController.prototype.onUploadClicked = function() {
 };
 
 ReceiptsController.prototype.onDownloadClicked = function() {
-    console.debug("onDownloadClicked");
+    var self = this;
+    this.dialogsService.showImportDialog(undefined).then(function(paste) {
+        self.pasteBinService.getPaste(paste.key).then(function(result) {
+            try {
+                self.importText(JSON.stringify(result.data));
+            } catch (e) {
+                self.dialogsService.showError({ "textContent": e, "parent": angular.element(document.body) });
+            }
+        }).catch(function(error) {
+            self.dialogsService.showError({ "textContent": error, "parent": angular.element(document.body) });
+        });
+    }).catch(function() {
+        // User has canceled
+    });
 };
 
-app.controller('receiptsController', ReceiptsController, ['$scope', 'DialogsService', 'DocumentService', 'ConfigService']);
+ReceiptsController.prototype.importText = function(text) {
+    var newDoc = JSON.parse(text);
+
+    // Check the version
+    if (newDoc.version !== this.documentService.version) {
+        throw "Invalid version (expected " + this.documentService.version + ", got " + newDoc.version + ")";
+    }
+
+    // Convert back the date object
+    newDoc.date = new Date(newDoc.date);
+    for (var i = 0; i < newDoc.rowData.length; i++) {
+        newDoc.rowData[i].amount = parseFloat(newDoc.rowData[i].amount);
+    }
+
+    // Copy
+    this.documentService.setFromObject(newDoc);
+};
+
+app.controller('receiptsController', ReceiptsController, ['$scope', '$filter', 'DialogsService', 'DocumentService', 'PasteBinService', 'ConfigService']);

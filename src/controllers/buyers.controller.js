@@ -7,17 +7,25 @@ function BuyersController($scope, DialogsService, DocumentService, ConfigService
         {
             "ariaLabel": "Add",
             "icon": "static/icons/add_circle_outline.svg",
-            "tooltip": "Add item",
+            "tooltip": "Add item (alt + enter)",
             "onClick": this.onAddClicked.bind(this)
         },
         {
             "ariaLabel": "Delete",
             "icon": "static/icons/delete.svg",
-            "tooltip": "Delete item(s)",
+            "tooltip": "Delete item(s) (canc)",
             "enabledFunction": this.hasEntriesSelected.bind(this),
             "onClick": this.onDeleteClicked.bind(this)
         }
     ];
+
+    this.$scope.$on('$routeChangeStart', function(next, current) {
+        Mousetrap.unbind('alt+enter');
+        Mousetrap.unbind('del');
+    });
+
+    Mousetrap.bind('alt+enter', this.onAddClicked.bind(this));
+    Mousetrap.bind('del', this.onDeleteClicked.bind(this));
 }
 
 BuyersController.prototype.getTabTitle = function() {
@@ -36,7 +44,11 @@ BuyersController.prototype.getEntries = function() {
     return this.documentService.getBuyers();
 };
 
-BuyersController.prototype.getBuyerTotal = function(buyer) {
+BuyersController.prototype.isCurrentBuyer = function(buyer) {
+        return buyer.name === this.documentService.getBuyer().name;
+};
+
+BuyersController.prototype.getBuyerDebt = function(buyer) {
     return this.documentService.getDebt(buyer);
 };
 
