@@ -5,7 +5,7 @@
 
             <div class="md-list-item-text" data-ng-click="$receiptsCtrl.onEntryClicked($event, entry)">
                 <h3 data-ng-bind="entry.description"></h3>
-                <p>Danilo, Stefano</p>
+                <p data-ng-bind="$receiptsCtrl.getFormattedEntryBuyers(entry)"></p>
             </div>
 
             <div class="md-secondary">

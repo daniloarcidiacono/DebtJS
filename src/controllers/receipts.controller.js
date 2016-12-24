@@ -49,6 +49,21 @@ ReceiptsController.prototype.getToolbarButtons = function() {
     return this.toolbarButtons;
 };
 
+ReceiptsController.prototype.getFormattedEntryBuyers = function(entry) {
+    var result = "";
+    var separator = "";
+
+    for (var i = 0; i < this.documentService.buyers.length; i++) {
+        var buyer = this.documentService.buyers[i];
+        if (entry[buyer.name] === true) {
+            result = result + separator + buyer.name;
+            separator = ", ";
+        }
+    }
+
+    return result;
+};
+
 ReceiptsController.prototype.onEntryClicked = function(ev, entry) {
     var entryCopy = angular.copy(entry);
     this.dialogsService.showEntryDetailsDialog(ev, entryCopy).then(function(entryEdited) {
@@ -67,11 +82,9 @@ ReceiptsController.prototype.onNewClicked = function() {
 
 ReceiptsController.prototype.onAddClicked = function() {
     var self = this;
-
     var entry = this.documentService.instanceEmptyEntry();
     this.dialogsService.showEntryDetailsDialog(undefined, entry).then(function() {
-        console.debug(entry);
-        //self.documentService.addItem(entry);
+        self.documentService.addItem(entry);
     }).catch(function() {
         // User has canceled
     });

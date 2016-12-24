@@ -23,10 +23,10 @@
                 <md-input-container class="md-icon-float md-block">
                     <label>Buyers</label>
                     <md-icon md-svg-src="static/icons/account_circle.svg" class="entrydetails-buyers-icon"></md-icon>
-                    <md-select ng-model="$entryDetailsCtrl.entry.buyers" multiple>
+                    <md-select ng-model="$entryDetailsCtrl.entry.selectedBuyersIndexes" multiple>
                         <md-optgroup label="Buyers">
                             <md-option data-ng-repeat="buyer in $entryDetailsCtrl.documentService.buyers"
-                                       data-ng-value="buyer"
+                                       data-ng-value="$index"
                                        data-ng-bind="buyer.name">
                             </md-option>
                         </md-optgroup>
