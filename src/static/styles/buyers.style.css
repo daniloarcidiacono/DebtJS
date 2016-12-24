@@ -1,0 +1,15 @@
+/**
+ * Buyers template CSS
+ **/
+.buyers-noentries-text {
+    color: #CCC;
+    text-align: center;
+}
+.buyers-noentries-icon {
+    width: 10em;
+    height: 10em;
+}
+
+.buyers-noentries-icon svg {
+    fill: #CCC;
+}

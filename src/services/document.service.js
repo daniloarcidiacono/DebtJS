@@ -63,12 +63,15 @@ DocumentService.prototype.addItem = function(entry) {
 	return entry;
 };
 
-DocumentService.prototype.addBuyer = function() {
-	var entry = {
+DocumentService.prototype.instanceEmptyBuyer = function() {
+	return {
 		"isSelected": false,
 		"name": ""
 	};
+};
 
+DocumentService.prototype.addBuyer = function(entry) {
+	entry = entry || this.instanceEmptyBuyer();
 	this.buyers.push(entry);
 
 	// Update the rows
@@ -173,6 +176,10 @@ DocumentService.prototype.getData = function() {
 
 DocumentService.prototype.getBuyer = function() {
 	return this.buyer;
+};
+
+DocumentService.prototype.getBuyersCount = function() {
+	return this.buyers.length;
 };
 
 DocumentService.prototype.getBuyers = function() {

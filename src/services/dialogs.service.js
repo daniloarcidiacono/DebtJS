@@ -30,4 +30,31 @@ DialogsService.prototype.showEntryDetailsDialog = function(ev, entry) {
 	return deferred.promise;
 };
 
+DialogsService.prototype.showBuyerDetailsDialog = function(ev, buyer) {
+	var deferred = this.$q.defer();
+
+	this.$mdDialog.show({
+		// http://stackoverflow.com/questions/31240772/passing-data-to-mddialog
+		locals: {
+			"buyer": buyer
+		},
+		controller: "buyerDetailsController as $buyerDetailsCtrl",
+		templateUrl: 'templates/dialogs/buyerdetails.template.html',
+		parent: angular.element(document.body),
+		targetEvent: ev,
+		clickOutsideToClose: true,
+		fullscreen: true
+	}).then(function(editedBuyer) {
+		if (editedBuyer !== undefined) {
+			deferred.resolve(editedBuyer);
+		} else {
+			deferred.reject();
+		}
+	}, function() {
+		deferred.reject();
+	});
+
+	return deferred.promise;
+};
+
 app.service('DialogsService', DialogsService, ['$mdDialog', '$q']);

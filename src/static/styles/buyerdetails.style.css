@@ -1,0 +1,10 @@
+/** Fixes overflow on buyerdetails dialog h2 toolbar title */
+.buyerdetails-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.buyerdetails-description-icon svg {
+    fill: dodgerblue;
+}

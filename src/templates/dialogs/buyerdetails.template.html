@@ -1,0 +1,34 @@
+<md-dialog aria-label="Edit buyer">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 class="buyerdetails-ellipsis">Edit "{{ ::$buyerDetailsCtrl.buyer.name }}"</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="$buyerDetailsCtrl.cancel()">
+                    <md-icon md-svg-src="static/icons/close.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content md-no-momentum">
+                <!-- Name -->
+                <md-input-container class="md-icon-float md-block">
+                    <label>Description</label>
+                    <md-icon md-svg-src="static/icons/description.svg" class="buyerdetails-description-icon"></md-icon>
+                    <input ng-model="$buyerDetailsCtrl.buyer.name" type="text" md-autofocus>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button class="md-raised md-primary" ng-click="$buyerDetailsCtrl.accept()">
+                Ok
+            </md-button>
+            <md-button class="md-secondary" ng-click="$buyerDetailsCtrl.reject()">
+                Cancel
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

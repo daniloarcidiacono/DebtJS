@@ -1,22 +1,28 @@
-<md-content>
-    <md-list flex>
-        <md-list-item data-ng-repeat="buyer in $buyersCtrl.getEntries()">
+<md-content layout="column" layout-fill>
+    <md-list data-ng-if="$buyersCtrl.hasEntries()"
+             flex>
+        <md-list-item data-ng-repeat="buyer in $buyersCtrl.getEntries()"
+                      data-ng-click="$buyersCtrl.onEntryClicked($event, buyer)">
             <md-checkbox class="md-primary"
                          data-ng-model="buyer.isSelected">
-
             </md-checkbox>
 
-            <input data-ng-model="buyer.name"
-                   data-ng-click="$event.stopPropagation()"
-                   type="text"
-                   md-autofocus
-                   placeholder="Name"
-                   flex>
+            <div data-ng-bind="buyer.name"></div>
 
-            <!-- <h3 data-ng-model="buyer.name"></h3> -->
             <div class="md-secondary">
                 {{ $buyersCtrl.getBuyerTotal(buyer) | number: 2 }} €
             </div>
         </md-list-item>
     </md-list>
+
+    <div data-ng-if="!$buyersCtrl.hasEntries()"
+         layout="column"
+         layout-align="space-around stretch"
+         layout-fill
+         flex>
+        <div flex></div>
+        <md-icon flex-none md-svg-icon="static/icons/account_circle.svg" class="buyers-noentries-icon"></md-icon>
+        <h1 flex-none class="md-display-3 buyers-noentries-text">No buyers</h1>
+        <div flex></div>
+    </div>
 </md-content>
