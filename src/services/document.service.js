@@ -15,6 +15,26 @@ DocumentService.prototype.reset = function() {
 	this.dateFormatted = moment().locale(this.locale).format('LL');
 };
 
+DocumentService.prototype.editBuyer = function(oldBuyer, newBuyer) {
+    var buyerIndex = this.buyers.indexOf(oldBuyer);
+    if (buyerIndex === -1) {
+        return;
+    }
+
+    if (this.buyer.name === oldBuyer.name) {
+        angular.copy(newBuyer, this.buyer);
+    }
+
+    for (var i = 0; i < this.rowData.length; i++) {
+        if (this.rowData[i][oldBuyer.name] !== undefined) {
+            this.rowData[i][newBuyer.name] = this.rowData[i][oldBuyer.name];
+            delete this.rowData[i][oldBuyer.name];
+        }
+    }
+
+    angular.copy(newBuyer, oldBuyer);
+};
+
 DocumentService.prototype.setFromObject = function(obj) {
     this.rowData = obj.rowData;
     this.buyers = obj.buyers;

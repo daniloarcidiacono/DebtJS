@@ -58,8 +58,9 @@ BuyersController.prototype.hasEntriesSelected = function() {
 
 BuyersController.prototype.onEntryClicked = function(ev, buyer) {
     var buyerCopy = angular.copy(buyer);
+    var self = this;
     this.dialogsService.showBuyerDetailsDialog(ev, buyerCopy).then(function(buyerEdited) {
-        angular.copy(buyerEdited, buyer);
+        self.documentService.editBuyer(buyer, buyerEdited);
     }).catch(function() {
         // User has canceled
     });
