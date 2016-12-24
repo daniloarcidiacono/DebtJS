@@ -1,6 +1,9 @@
-<md-content>
-    <md-list flex>
-        <md-list-item class="md-2-line md-long-text" data-ng-repeat="entry in $receiptsCtrl.documentService.getData()">
+<md-content layout="column" layout-fill>
+
+    <md-list data-ng-if="$receiptsCtrl.hasEntries()"
+             flex>
+        <md-list-item class="md-2-line md-long-text"
+                      data-ng-repeat="entry in $receiptsCtrl.getEntries()">
             <md-checkbox class="md-primary" ng-model="entry.isSelected"></md-checkbox>
 
             <div class="md-list-item-text" data-ng-click="$receiptsCtrl.onEntryClicked($event, entry)">
@@ -14,4 +17,15 @@
             </div>
         </md-list-item>
     </md-list>
+
+    <div data-ng-if="!$receiptsCtrl.hasEntries()"
+         layout="column"
+         layout-align="space-around stretch"
+         layout-fill
+         flex>
+        <div flex></div>
+        <md-icon flex-none md-svg-icon="static/icons/receipt.svg" class="receipt-noentries-icon"></md-icon>
+        <h1 flex-none class="md-display-3 receipt-noentries-text">No entries</h1>
+        <div flex></div>
+    </div>
 </md-content>

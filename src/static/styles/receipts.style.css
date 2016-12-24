@@ -7,6 +7,19 @@ md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line > .md-no-st
     white-space: normal;
 }
 
+.receipt-noentries-text {
+    color: #CCC;
+    text-align: center;
+}
+.receipt-noentries-icon {
+    width: 10em;
+    height: 10em;
+}
+
+.receipt-noentries-icon svg {
+    fill: #CCC;
+}
+
 .receipt-center {
     display: table;
     margin: 5px auto;

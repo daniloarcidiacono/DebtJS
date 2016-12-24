@@ -76,6 +76,14 @@ ReceiptsController.prototype.onEntryClicked = function(ev, entry) {
     ev.stopPropagation();
 };
 
+ReceiptsController.prototype.getEntries = function() {
+    return this.documentService.getData();
+};
+
+ReceiptsController.prototype.hasEntries = function() {
+    return this.documentService.getData().length > 0;
+};
+
 ReceiptsController.prototype.onNewClicked = function() {
     console.debug("onNewClicked");
 };
