@@ -1,7 +1,8 @@
 <md-sidenav class="md-sidenav-left"
             md-component-id="left"
             md-whiteframe="4"
-            md-swipe-left="$sidenavCtrl.closeSidenav()">
+            md-swipe-left="$sidenavCtrl.closeSidenav($event)">
+    <!-- Title -->
     <md-toolbar class="md-theme-light">
         <md-list>
             <md-list-item class="md-2-line" ng-click="$sidenavCtrl.navigateToGithub()">
@@ -19,6 +20,7 @@
                         </h1> -->
     </md-toolbar>
 
+    <!-- Content -->
     <md-content layout-padding>
         <form layout="column">
             <div>

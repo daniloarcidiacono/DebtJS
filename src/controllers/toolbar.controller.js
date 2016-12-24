@@ -20,4 +20,15 @@ ToolbarController.prototype.getButtons = function() {
     return ctrl !== undefined ? ctrl.getToolbarButtons() : [];
 };
 
+ToolbarController.prototype.isAnyOverflowableButton = function() {
+    var buttons = this.getButtons();
+    for (var i = 0; i < buttons.length; i++) {
+        if (buttons[i].overflow) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
 app.controller('toolbarController', ToolbarController, ['$scope', '$mdSidenav', 'TabsService', 'DocumentService', 'ConfigService']);

@@ -1,0 +1,37 @@
+/**
+ * Recepits template CSS
+ **/
+
+/* Fixes wrapping in receipts template */
+md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line > .md-no-style .md-list-item-text h3 {
+    white-space: normal;
+}
+
+.receipt-center {
+    display: table;
+    margin: 5px auto;
+}
+
+/* Badges */
+.receipt-badge {
+    min-width: 2rem;
+    padding: 0 6px;
+    text-align: center;
+    font-size: 1rem;
+    line-height: inherit;
+    box-sizing: border-box;
+
+    font-weight: 300;
+    font-size: 0.8rem;
+    color: #fff;
+    background-color: #26a69a;
+    border-radius: 2px;
+}
+
+.receipt-badge-red {
+    background-color: #F44336 !important;
+}
+
+.receipt-badge-blue {
+    background-color: #2196F3 !important;
+}

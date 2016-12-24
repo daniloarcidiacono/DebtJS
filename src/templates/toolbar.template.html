@@ -33,7 +33,9 @@
         </md-button>
 
         <!-- Overflow menu -->
-        <md-menu md-position-mode="target-right target" hide-gt-xs>
+        <md-menu md-position-mode="target-right target"
+                 data-ng-if="$toolbarCtrl.isAnyOverflowableButton()"
+                 hide-gt-xs>
             <!-- Overflow button -->
             <md-button class="md-icon-button" aria-label="More" ng-click="$mdOpenMenu($event)">
                 <md-icon  md-menu-origin="" md-svg-icon="static/icons/more_vert.svg"></md-icon>
