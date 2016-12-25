@@ -24,6 +24,11 @@
 			md-nav-bar .md-nav-bar {
 				background: #283593;
 			}
+
+            /* This prevents the "pull to reload" on mobile browsers */
+			body {
+				overflow-y: hidden;
+			}
 		</style>
 	</head>
 	<body ng-app="DebtJSApp" ng-controller="mainController as mainCtrl" ng-cloak>
