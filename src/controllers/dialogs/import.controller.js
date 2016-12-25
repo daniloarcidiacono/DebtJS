@@ -50,7 +50,15 @@ ImportController.prototype.deletePaste = function(event, paste) {
         .cancel('Keep them');
 
     this.dialogsService.$mdDialog.show(confirm).then(function() {
-        // TODO: Remove paste
+        self.pasteBinService.deletePaste(paste.key).then( function() {
+            self.toastsService.showSimpleToast({
+                "textContent": "Paste " + paste.key + " removed."
+            });
+        }).catch(function(error) {
+            self.toastsService.showSimpleToast({
+                "textContent": "Could not delete paste " + paste.key + ": " + error.statusText
+            });
+        });
     }, function() {
         // User has canceled
     });
