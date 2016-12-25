@@ -1,13 +1,17 @@
 {
+  "main": "src/index.html",
   "name": "DebtJS",
-  "title": "DebtJS",
-  "width": 400,
-  "height": 800,
-  "position": "center",
-  "resizable": true,
-  "min_width": 100,
-  "min_height:": 400,
-  "as_desktop": true,
-  "show_in_taskbar": true,
-  "main": "src/index.html"
+  "description": "Node-webkit version of DebtJS",
+  "version": "2.0.0",
+  "window": {
+    "title": "cccc",
+    "icon": "src/static/icon/favicon.ico",
+    "width": 500,
+    "height": 800,
+    "position": "center",
+    "resizable": true,
+    "min_width": 100,
+    "min_height:": 400,
+    "show_in_taskbar": true
+  }
 }
