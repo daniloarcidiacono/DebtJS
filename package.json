@@ -1,0 +1,13 @@
+{
+  "name": "DebtJS",
+  "title": "DebtJS",
+  "width": 400,
+  "height": 800,
+  "position": "center",
+  "resizable": true,
+  "min_width": 100,
+  "min_height:": 400,
+  "as_desktop": true,
+  "show_in_taskbar": true,
+  "main": "src/index.html"
+}
