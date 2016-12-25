@@ -1,5 +1,5 @@
 <md-dialog aria-label="Edit buyer">
-    <form ng-cloak>
+    <form ng-cloak name="buyerForm">
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2 class="buyerdetails-ellipsis">Edit "{{ ::$buyerDetailsCtrl.buyer.name }}"</h2>
@@ -16,17 +16,23 @@
                 <md-input-container class="md-icon-float md-block">
                     <label>Description</label>
                     <md-icon md-svg-src="static/icons/description.svg" class="buyerdetails-description-icon"></md-icon>
-                    <input ng-model="$buyerDetailsCtrl.buyer.name" type="text" md-autofocus>
+                    <input ng-model="$buyerDetailsCtrl.buyer.name" name="name" type="text" md-autofocus required>
+                    <div ng-messages="buyerForm.name.$error"
+                         data-ng-show="buyerForm.name.$touched">
+                        <div ng-message="required">This is required.</div>
+                    </div>
                 </md-input-container>
             </div>
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button class="md-raised md-primary" ng-click="$buyerDetailsCtrl.accept()">
+            <md-button class="md-raised md-primary"
+                       data-ng-click="$buyerDetailsCtrl.accept()"
+                       data-ng-disabled="buyerForm.$invalid">
                 Ok
             </md-button>
-            <md-button class="md-secondary" ng-click="$buyerDetailsCtrl.reject()">
+            <md-button class="md-secondary" data-ng-click="$buyerDetailsCtrl.reject()">
                 Cancel
             </md-button>
         </md-dialog-actions>

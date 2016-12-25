@@ -1,5 +1,5 @@
 <md-dialog aria-label="Save a paste">
-    <form ng-cloak layout="column" layout-fill flex>
+    <form ng-cloak layout="column" layout-fill flex name="exportForm">
         <md-toolbar flex-none>
             <div class="md-toolbar-tools">
                 <h2 class="export-ellipsis">Save paste</h2>
@@ -21,17 +21,24 @@
                 <!-- Name -->
                 <md-input-container class="md-icon-float md-block">
                     <label>Name</label>
-                    <input ng-model="$exportCtrl.name" type="text" md-autofocus>
+                    <input ng-model="$exportCtrl.name" name="name" type="text" md-autofocus required>
+                    <div ng-messages="exportForm.name.$error"
+                         data-ng-show="exportForm.name.$touched">
+                        <div ng-message="required">This is required.</div>
+                    </div>
                 </md-input-container>
             </div>
         </md-dialog-content>
 
         <md-dialog-actions layout="row" flex-none>
             <span flex></span>
-            <md-button class="md-raised md-primary" ng-click="$exportCtrl.accept()">
+            <md-button class="md-raised md-primary"
+                       data-ng-click="$exportCtrl.accept()"
+                       data-ng-disabled="exportForm.$invalid">
                 Ok
             </md-button>
-            <md-button class="md-secondary" ng-click="$exportCtrl.reject()">
+            <md-button class="md-secondary"
+                       data-ng-click="$exportCtrl.reject()">
                 Cancel
             </md-button>
         </md-dialog-actions>

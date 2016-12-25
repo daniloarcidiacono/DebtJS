@@ -135,6 +135,7 @@ ReceiptsController.prototype.onNewClicked = function() {
 ReceiptsController.prototype.onAddClicked = function() {
     var self = this;
     var entry = this.documentService.instanceEmptyEntry();
+    entry[this.documentService.getBuyer().name] = true;
     this.dialogsService.showEntryDetailsDialog(undefined, entry).then(function() {
         self.documentService.addItem(entry);
     }).catch(function() {
