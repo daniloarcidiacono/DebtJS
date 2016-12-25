@@ -1,10 +1,10 @@
-function TabsService($rootScope) {
+function TabsService($rootScope, $location) {
 	this.currentNavItem = "receipts";
 
 	var self = this;
-	$rootScope.$on('$routeChangeSuccess', function(event, current) {
-		self.currentNavItem = current.locals.$template.toLowerCase().trim();
+	$rootScope.$on('$routeChangeSuccess', function() {
+		self.currentNavItem = $location.path().trim().substring(1);
 	});
 }
 
-app.service('TabsService', TabsService, ['$rootScope']);
+app.service('TabsService', TabsService, ['$rootScope', '$location']);
