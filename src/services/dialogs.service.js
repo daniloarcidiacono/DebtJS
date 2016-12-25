@@ -83,6 +83,33 @@ DialogsService.prototype.showImportDialog = function(ev, importFunction) {
 	return deferred.promise;
 };
 
+DialogsService.prototype.showExportDialog = function(ev, suggestedName, exportFunction) {
+	var deferred = this.$q.defer();
+
+	this.$mdDialog.show({
+		locals: {
+			"suggestedName": suggestedName,
+			"exportFunction": exportFunction
+		},
+		controller: "exportController as $exportCtrl",
+		templateUrl: 'templates/dialogs/export.template.html',
+		parent: angular.element(document.body),
+		targetEvent: ev,
+		clickOutsideToClose: true,
+		fullscreen: false
+	}).then(function(nameAndPasteKey) {
+		if (nameAndPasteKey !== undefined) {
+			deferred.resolve(nameAndPasteKey);
+		} else {
+			deferred.reject();
+		}
+	}, function() {
+		deferred.reject();
+	});
+
+	return deferred.promise;
+};
+
 DialogsService.prototype.showError = function(options) {
 	this.$mdDialog.show(
 		this.$mdDialog.alert()
@@ -93,7 +120,6 @@ DialogsService.prototype.showError = function(options) {
 			.ariaLabel(options.ariaLabel || 'Error')
 			.ok(options.ok || 'Dismiss')
 	);
-}
-
+};
 
 app.service('DialogsService', DialogsService, ['$mdDialog', '$q']);

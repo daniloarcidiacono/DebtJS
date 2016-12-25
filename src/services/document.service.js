@@ -49,8 +49,25 @@ DocumentService.prototype.setFromObject = function(obj) {
     this.dateFormatted = obj.dateFormatted;
 };
 
+DocumentService.prototype.getDocumentObject = function() {
+	return {
+		"rowData": this.rowData,
+		"buyers": this.buyers,
+		"buyer": this.buyer,
+		"version": this.version,
+		"title": this.title,
+		"locale": this.locale,
+		"date": this.date,
+		"dateFormatted": this.dateFormatted
+	};
+};
+
 DocumentService.prototype.getExportTitle = function() {
-	return this.title.toLowerCase().replace(' ', '') + "_" + this.formatDate(this.date);
+	var result = this.title.toLowerCase().trim();
+	result = result.replace(new RegExp(' ', 'g'), '');
+	result = result + "_" + this.formatDate(this.date);
+
+	return result;
 };
 
 DocumentService.prototype.getAsJSON = function() {

@@ -1,0 +1,10 @@
+/** Fixes overflow on export dialog h2 toolbar title */
+.export-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.export-name-icon svg {
+    fill: dodgerblue;
+}

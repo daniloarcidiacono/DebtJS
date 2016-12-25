@@ -1,0 +1,39 @@
+<md-dialog aria-label="Save a paste">
+    <form ng-cloak layout="column" layout-fill flex>
+        <md-toolbar flex-none>
+            <div class="md-toolbar-tools">
+                <h2 class="export-ellipsis">Save paste</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="$exportCtrl.cancel()">
+                    <md-icon md-svg-src="static/icons/close.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content layout="column" layout-align="space-between center" layout-fill flex>
+            <!-- Spinner -->
+            <md-progress-linear md-mode="indeterminate"
+                                data-ng-if="$exportCtrl.isLoading()"
+                                flex="none">
+            </md-progress-linear>
+
+            <div class="md-dialog-content md-no-momentum">
+                <!-- Name -->
+                <md-input-container class="md-icon-float md-block">
+                    <label>Name</label>
+                    <input ng-model="$exportCtrl.name" type="text" md-autofocus>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" flex-none>
+            <span flex></span>
+            <md-button class="md-raised md-primary" ng-click="$exportCtrl.accept()">
+                Ok
+            </md-button>
+            <md-button class="md-secondary" ng-click="$exportCtrl.reject()">
+                Cancel
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -161,7 +161,14 @@ ReceiptsController.prototype.onDeleteClicked = function() {
 };
 
 ReceiptsController.prototype.onUploadClicked = function() {
-    console.debug("onUploadClicked");
+    var self = this;
+    this.dialogsService.showExportDialog(undefined, this.documentService.getExportTitle(), this.exportPaste.bind(this)).then(function(nameAndPasteKey) {
+        self.toastsService.showSimpleToast({
+            "textContent": "Paste saved to http://pastebin.com/" + nameAndPasteKey.key
+        });
+    }).catch(function() {
+        // User has canceled
+    });
 };
 
 ReceiptsController.prototype.onDownloadClicked = function() {
@@ -171,6 +178,23 @@ ReceiptsController.prototype.onDownloadClicked = function() {
     }).catch(function() {
         // User has canceled
     });
+};
+
+ReceiptsController.prototype.exportPaste = function(name) {
+    var deferred = this.$q.defer();
+
+    // 1: Get the paste
+    this.pasteBinService.createPastebin(name, this.documentService.getDocumentObject()).then(function(result) {
+        var pasteKey = result.data;
+
+        // Success
+        deferred.resolve(pasteKey);
+    }).catch(function(error) {
+        // Network error
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
 };
 
 ReceiptsController.prototype.importPaste = function(paste) {
