@@ -22,19 +22,19 @@
             <div>
                 <md-input-container class="md-block">
                     <label for="txtDescription">Description</label>
-                    <input type="text" id="txtDescription" ng-model="$sidenavCtrl.getDocument().title">
+                    <input type="text" id="txtDescription" data-ng-model="$sidenavCtrl.documentService.title">
                 </md-input-container>
 
                 <md-input-container>
                     <label>Enter date</label>
-                    <md-datepicker ng-model="$sidenavCtrl.getDocument().date"></md-datepicker>
+                    <md-datepicker ng-model="$sidenavCtrl.documentService.date"></md-datepicker>
                 </md-input-container>
             </div>
 
             <md-input-container>
                 <label>Buyer</label>
-                <md-select ng-model="$sidenavCtrl.getDocument().buyer">
-                    <md-option ng-value="buyer" ng-repeat="buyer in $sidenavCtrl.getDocument().buyers">
+                <md-select data-ng-model="$sidenavCtrl.documentService.buyer">
+                    <md-option data-ng-value="buyer" data-ng-repeat="buyer in $sidenavCtrl.documentService.buyers">
                         {{ buyer.name }}
                     </md-option>
                 </md-select>
@@ -43,10 +43,12 @@
             <md-list>
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
-                        <h3>Local storage</h3>
-                        <p>Use local storage to save the current data</p>
+                        <h3>Web storage</h3>
+                        <p>Use the web storage as data backup</p>
                     </div>
-                    <md-switch class="md-primary" ng-model="setting.enabled"></md-switch>
+                    <md-switch class="md-primary"
+                               data-ng-model="$sidenavCtrl.storageService.saveToStorage">
+                    </md-switch>
                 </md-list-item>
 
                 <md-divider ></md-divider>

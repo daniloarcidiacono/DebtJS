@@ -38,15 +38,12 @@ DocumentService.prototype.editBuyer = function(oldBuyer, newBuyer) {
     angular.copy(newBuyer, oldBuyer);
 };
 
-DocumentService.prototype.setFromObject = function(obj) {
-    this.rowData = obj.rowData;
-    this.buyers = obj.buyers;
-    this.buyer = obj.buyer;
-    this.version = obj.version;
-    this.title = obj.title;
-    this.locale = obj.locale;
-    this.date = obj.date;
-    this.dateFormatted = obj.dateFormatted;
+DocumentService.prototype.getExportTitle = function() {
+	var result = this.title.toLowerCase().trim();
+	result = result.replace(new RegExp(' ', 'g'), '');
+	result = result + "_" + this.formatDate(this.date);
+
+	return result;
 };
 
 DocumentService.prototype.getDocumentObject = function() {
@@ -62,16 +59,28 @@ DocumentService.prototype.getDocumentObject = function() {
 	};
 };
 
-DocumentService.prototype.getExportTitle = function() {
-	var result = this.title.toLowerCase().trim();
-	result = result.replace(new RegExp(' ', 'g'), '');
-	result = result + "_" + this.formatDate(this.date);
+DocumentService.prototype.setFromObject = function(obj) {
+	// Convert back the date object
+	if (typeof obj.date === "string") {
+		obj.date = new Date(obj.date);
+	}
 
-	return result;
-};
+	// Convert back the amounts
+	for (var i = 0; i < obj.rowData.length; i++) {
+		if (typeof obj.rowData[i].amount === "string") {
+			obj.rowData[i].amount = parseFloat(obj.rowData[i].amount);
+		}
+	}
 
-DocumentService.prototype.getAsJSON = function() {
-	return JSON.stringify(this); // TODO: check
+	// Set
+	this.rowData = obj.rowData;
+	this.buyers = obj.buyers;
+	this.buyer = obj.buyer;
+	this.version = obj.version;
+	this.title = obj.title;
+	this.locale = obj.locale;
+	this.date = obj.date;
+	this.dateFormatted = obj.dateFormatted;
 };
 
 DocumentService.prototype.getSelectedItemsCount = function () {

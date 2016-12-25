@@ -204,19 +204,11 @@ ReceiptsController.prototype.importPaste = function(paste) {
 
     // 1: Get the paste
     this.pasteBinService.getPaste(paste.key).then(function(result) {
-        // 2: Parse the paste
+        // 2: Check the version
         try {
             var newDoc = result.data;
-
-            // Check the version
             if (newDoc.version !== self.documentService.version) {
                 throw "Invalid version (expected " + self.documentService.version + ", got " + newDoc.version + ")";
-            }
-
-            // Convert back the date object
-            newDoc.date = new Date(newDoc.date);
-            for (var i = 0; i < newDoc.rowData.length; i++) {
-                newDoc.rowData[i].amount = parseFloat(newDoc.rowData[i].amount);
             }
 
             // Success
