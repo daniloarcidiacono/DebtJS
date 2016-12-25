@@ -65,10 +65,14 @@ DocumentService.prototype.setFromObject = function(obj) {
 		obj.date = new Date(obj.date);
 	}
 
-	// Convert back the amounts
+	// Convert back the amounts and quantities
 	for (var i = 0; i < obj.rowData.length; i++) {
 		if (typeof obj.rowData[i].amount === "string") {
 			obj.rowData[i].amount = parseFloat(obj.rowData[i].amount);
+		}
+
+		if (typeof obj.rowData[i].quantity === "string") {
+			obj.rowData[i].quantity = parseInt(obj.rowData[i].quantity);
 		}
 	}
 
