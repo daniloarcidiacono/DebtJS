@@ -1,6 +1,6 @@
 <md-dialog aria-label="Pick a paste">
-    <form ng-cloak id="importDialog">
-        <md-toolbar>
+    <form ng-cloak layout="column" layout-fill flex>
+        <md-toolbar flex-none>
             <div class="md-toolbar-tools">
                 <h2 class="import-ellipsis">Pick a paste</h2>
                 <span flex></span>
@@ -10,15 +10,15 @@
             </div>
         </md-toolbar>
 
-        <md-dialog-content layout="column" layout-align="center center" layout-fill>
+        <md-dialog-content layout="column" layout-align="space-between center" layout-fill flex>
             <!-- Spinner -->
             <md-progress-linear md-mode="indeterminate"
-                                  data-ng-if="$importCtrl.isLoading()"
-                                  flex="none">
+                                data-ng-if="$importCtrl.isLoading()"
+                                flex="none">
             </md-progress-linear>
 
             <!-- Pastes -->
-            <md-list data-ng-if="$importCtrl.hasPastes()"
+            <md-list data-ng-if="$importCtrl.hasPastesLoaded() && $importCtrl.hasPastes()"
                      flex>
                 <md-list-item data-ng-repeat="paste in $importCtrl.getPastes()"
                               data-ng-click="$importCtrl.accept(paste)">
@@ -41,19 +41,20 @@
             </md-list>
 
             <!-- No pastes -->
-            <div data-ng-if="!$importCtrl.isLoading() && !$importCtrl.hasPastes()"
+            <div data-ng-if="$importCtrl.hasPastesLoaded() && !$importCtrl.hasPastes()"
+                 class="md-padding"
                  layout="column"
                  layout-align="space-around stretch"
                  layout-fill
                  flex>
                 <div flex></div>
                 <md-icon flex-none md-svg-icon="static/icons/receipt.svg" class="import-noentries-icon"></md-icon>
-                <h1 flex-none class="md-display-3 import-noentries-text">No pastes</h1>
+                <h3 flex-none class="md-display-3 import-noentries-text">No pastes</h3>
                 <div flex></div>
             </div>
         </md-dialog-content>
 
-        <md-dialog-actions layout="row">
+        <md-dialog-actions layout="row" flex-none>
             <span flex></span>
             <md-button class="md-raised md-secondary" ng-click="$importCtrl.reject()">
                 Cancel

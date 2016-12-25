@@ -1,21 +1,23 @@
-function ImportController($scope, $mdDialog, DialogsService, PasteBinService) {
+function ImportController($scope, ToastsService, DialogsService, PasteBinService, importFunction) {
     this.$scope = $scope;
-    this.$mdDialog = $mdDialog;
+    this.toastsService = ToastsService;
     this.dialogsService = DialogsService;
     this.pasteBinService = PasteBinService;
+    this.importFunction = importFunction;
     this.pastes = undefined;
 
     var self = this;
     this.loading = true;
-    this.loadingError = undefined;
 
     this.pasteBinService.listPastebins().then(function(result) {
         self.pastes = result.data;
         self.loading = false;
     }).catch(function(error) {
-        self.pastes = undefined;
-        self.loadingError = error;
+        self.pastes = [];
         self.loading = false;
+        self.toastsService.showSimpleToast({
+            "textContent": "Could not load pastes: " + error.statusText
+        });
     });
 }
 
@@ -23,8 +25,12 @@ ImportController.prototype.isLoading = function() {
     return this.loading;
 };
 
+ImportController.prototype.hasPastesLoaded = function() {
+    return this.pastes !== undefined;
+};
+
 ImportController.prototype.hasPastes = function() {
-    return !this.loading && !this.loadingError && this.pastes.length > 0;
+    return this.pastes !== undefined && this.pastes.length > 0;
 };
 
 ImportController.prototype.getPastes = function() {
@@ -53,16 +59,26 @@ ImportController.prototype.deletePaste = function(event, paste) {
 };
 
 ImportController.prototype.cancel = function() {
-    this.$mdDialog.cancel();
+    this.dialogsService.$mdDialog.cancel();
 };
 
 ImportController.prototype.accept = function(paste) {
-    // Hide
-    this.$mdDialog.hide(paste);
+    this.loading = true;
+
+    var self = this;
+    this.importFunction(paste).then(function(importedObject) {
+        self.loading = false;
+        self.dialogsService.$mdDialog.hide(importedObject);
+    }).catch(function(error) {
+        self.loading = false;
+        self.toastsService.showSimpleToast({
+            "textContent": "Could not import the paste:" + error.statusText
+        });
+    });
 };
 
 ImportController.prototype.reject = function() {
-    this.$mdDialog.hide(undefined);
+    this.dialogsService.$mdDialog.hide(undefined);
 };
 
-app.controller('importController', ImportController, [ '$scope', '$mdDialog', 'DialogsService', 'PasteBinService' ]);
+app.controller('importController', ImportController, [ '$scope', 'ToastsService', 'DialogsService', 'PasteBinService' ]);

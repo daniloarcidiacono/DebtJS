@@ -1,6 +1,8 @@
-function ReceiptsController($scope, $filter, DialogsService, DocumentService, PasteBinService, ConfigService) {
+function ReceiptsController($scope, $filter, $q, ToastsService, DialogsService, DocumentService, PasteBinService, ConfigService) {
     this.$scope = $scope;
     this.$filter = $filter;
+    this.$q = $q;
+    this.toastsService = ToastsService;
     this.dialogsService = DialogsService;
     this.documentService = DocumentService;
     this.pasteBinService = PasteBinService;
@@ -164,37 +166,46 @@ ReceiptsController.prototype.onUploadClicked = function() {
 
 ReceiptsController.prototype.onDownloadClicked = function() {
     var self = this;
-    this.dialogsService.showImportDialog(undefined).then(function(paste) {
-        self.pasteBinService.getPaste(paste.key).then(function(result) {
-            try {
-                self.importText(JSON.stringify(result.data));
-            } catch (e) {
-                self.dialogsService.showError({ "textContent": e, "parent": angular.element(document.body) });
-            }
-        }).catch(function(error) {
-            self.dialogsService.showError({ "textContent": error, "parent": angular.element(document.body) });
-        });
+    this.dialogsService.showImportDialog(undefined, this.importPaste.bind(this)).then(function(importedObject) {
+        self.documentService.setFromObject(importedObject);
     }).catch(function() {
         // User has canceled
     });
 };
 
-ReceiptsController.prototype.importText = function(text) {
-    var newDoc = JSON.parse(text);
+ReceiptsController.prototype.importPaste = function(paste) {
+    var deferred = this.$q.defer();
+    var self = this;
 
-    // Check the version
-    if (newDoc.version !== this.documentService.version) {
-        throw "Invalid version (expected " + this.documentService.version + ", got " + newDoc.version + ")";
-    }
+    // 1: Get the paste
+    this.pasteBinService.getPaste(paste.key).then(function(result) {
+        // 2: Parse the paste
+        try {
+            var newDoc = result.data;
 
-    // Convert back the date object
-    newDoc.date = new Date(newDoc.date);
-    for (var i = 0; i < newDoc.rowData.length; i++) {
-        newDoc.rowData[i].amount = parseFloat(newDoc.rowData[i].amount);
-    }
+            // Check the version
+            if (newDoc.version !== self.documentService.version) {
+                throw "Invalid version (expected " + self.documentService.version + ", got " + newDoc.version + ")";
+            }
 
-    // Copy
-    this.documentService.setFromObject(newDoc);
+            // Convert back the date object
+            newDoc.date = new Date(newDoc.date);
+            for (var i = 0; i < newDoc.rowData.length; i++) {
+                newDoc.rowData[i].amount = parseFloat(newDoc.rowData[i].amount);
+            }
+
+            // Success
+            deferred.resolve(newDoc);
+        } catch (e) {
+            // Parsing error
+            deferred.reject(e);
+        }
+    }).catch(function(error) {
+        // Network error
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
 };
 
-app.controller('receiptsController', ReceiptsController, ['$scope', '$filter', 'DialogsService', 'DocumentService', 'PasteBinService', 'ConfigService']);
+app.controller('receiptsController', ReceiptsController, ['$scope', '$filter', '$q', 'ToastsService', 'DialogsService', 'DocumentService', 'PasteBinService', 'ConfigService']);

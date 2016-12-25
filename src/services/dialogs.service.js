@@ -57,19 +57,22 @@ DialogsService.prototype.showBuyerDetailsDialog = function(ev, buyer) {
 	return deferred.promise;
 };
 
-DialogsService.prototype.showImportDialog = function(ev) {
+DialogsService.prototype.showImportDialog = function(ev, importFunction) {
 	var deferred = this.$q.defer();
 
 	this.$mdDialog.show({
+		locals: {
+			"importFunction": importFunction
+		},
 		controller: "importController as $importCtrl",
 		templateUrl: 'templates/dialogs/import.template.html',
 		parent: angular.element(document.body),
 		targetEvent: ev,
 		clickOutsideToClose: true,
 		fullscreen: true
-	}).then(function(pickedPaste) {
-		if (pickedPaste !== undefined) {
-			deferred.resolve(pickedPaste);
+	}).then(function(importedObject) {
+		if (importedObject !== undefined) {
+			deferred.resolve(importedObject);
 		} else {
 			deferred.reject();
 		}
