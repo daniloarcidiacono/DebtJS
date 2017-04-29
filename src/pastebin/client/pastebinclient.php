@@ -165,7 +165,7 @@
 
 			$api_dev_key 		= $this->credentials->getApiDeveloperKey();
 			$api_user_key 		= $this->api_user_key;
-			$api_results_limit 	= '100';
+			$api_results_limit 	= '1000'; // this is not required, by default its set to 50, min value is 1, max value is 1000g
 			$url = 'http://pastebin.com/api/api_post.php';
 			$ch = curl_init($url);
 
