@@ -35,7 +35,7 @@
 			$api_user_password 	= $this->credentials->getApiPassword();
 			$api_user_name 		= urlencode($api_user_name);
 			$api_user_password 	= urlencode($api_user_password);
-			$url				= 'http://pastebin.com/api/api_login.php';
+			$url				= 'https://pastebin.com/api/api_login.php';
 			$ch					= curl_init($url);
 
 			curl_setopt($ch, CURLOPT_POST, true);
@@ -69,7 +69,7 @@
 		 *
 		 * @throws PasteBinNotLoggedInException if the login() method has not been called before.
 		 * @throws PasteBinClientException if the creation of the paste fails for some other reason.
-		 * @return the paste key of the created paste (ex. http://pastebin.com/UIFdu235s -> UIFdu235s)
+		 * @return the paste key of the created paste (ex. https://pastebin.com/UIFdu235s -> UIFdu235s)
 		 */
 		public function newPaste($name, $contents) {
 			// Check that we have logged in
@@ -87,7 +87,7 @@
 			$api_paste_name			= urlencode($api_paste_name);
 			$api_paste_code			= urlencode($api_paste_code);
 
-			$url = 'http://pastebin.com/api/api_post.php';
+			$url = 'https://pastebin.com/api/api_post.php';
 			$ch	= curl_init($url);
 
 			curl_setopt($ch, CURLOPT_POST, true);
@@ -106,14 +106,14 @@
 			}
 
 			// Success, return the paste key
-			// Strip the url (http://stackoverflow.com/questions/13041282/pastebin-api-paste-data/16245075#16245075)
-			return str_replace("http://pastebin.com/", "", $response);
+			// Strip the url (https://stackoverflow.com/questions/13041282/pastebin-api-paste-data/16245075#16245075)
+			return str_replace("https://pastebin.com/", "", $response);
 
 		}
 
 		/**
 		 * Gets the raw content of the specified paste
-		 * Example: http://pastebin.com/UIFdu235s,  $pasteKey = UIFdu235s
+		 * Example: https://pastebin.com/UIFdu235s,  $pasteKey = UIFdu235s
 		 *
 		 * @throws PasteBinNotLoggedInException if the login() method has not been called before.
 		 * @throws PasteBinClientException if the creation of the paste fails for some other reason.
@@ -128,7 +128,7 @@
 			$api_dev_key 		= $this->credentials->getApiDeveloperKey();
 			$api_user_key 		= $this->api_user_key;
 			$api_paste_key 		= $pasteKey;
-			$url = 'http://pastebin.com/api/api_raw.php';
+			$url = 'https://pastebin.com/api/api_raw.php';
 			$ch = curl_init($url);
 
 			curl_setopt($ch, CURLOPT_POST, true);
@@ -165,8 +165,8 @@
 
 			$api_dev_key 		= $this->credentials->getApiDeveloperKey();
 			$api_user_key 		= $this->api_user_key;
-			$api_results_limit 	= '1000'; // this is not required, by default its set to 50, min value is 1, max value is 1000g
-			$url = 'http://pastebin.com/api/api_post.php';
+			$api_results_limit 	= '1000'; // this is not required, by default its set to 50, min value is 1, max value is 1000
+			$url = 'https://pastebin.com/api/api_post.php';
 			$ch = curl_init($url);
 
 			curl_setopt($ch, CURLOPT_POST, true);
@@ -206,7 +206,7 @@
 
 		/**
 		 * Deletes the specified paste
-		 * Example: http://pastebin.com/UIFdu235s,  $pasteKey = UIFdu235s
+		 * Example: https://pastebin.com/UIFdu235s,  $pasteKey = UIFdu235s
 		 *
 		 * @throws PasteBinNotLoggedInException if the login() method has not been called before.
 		 * @throws PasteBinClientException if the removal of the paste fails for some other reason.
@@ -220,7 +220,7 @@
 			$api_dev_key 		= $this->credentials->getApiDeveloperKey();
 			$api_user_key 		= $this->api_user_key;
 			$api_paste_key 		= $pasteKey;
-			$url = 'http://pastebin.com/api/api_post.php';
+			$url = 'https://pastebin.com/api/api_post.php';
 			$ch = curl_init($url);
 
 			curl_setopt($ch, CURLOPT_POST, true);
